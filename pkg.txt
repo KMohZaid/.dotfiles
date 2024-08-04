@@ -4,6 +4,7 @@ neovim
 neofetch
 rclone
 rsync
+rust
 starship
 tmux
 zig
