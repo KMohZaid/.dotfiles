@@ -1,0 +1,10 @@
+curl
+vim
+neovim
+neofetch
+rclone
+rsync
+starship
+tmux
+zig
+stow
