@@ -110,9 +110,10 @@ export EDITOR=nvim
 
 # ---------------- turn green bg dir into normal, bcz it is unreadable. btw it was for telling which dir have wriote and execution permission to group/others
 export LS_COLORS="$LS_COLORS:ow=1;34:tw=1;34:"
+export PATH=$PATH:~/.local/bin
 
 # ------------ Custom Aliases
 
 alias vim=nvim
 alias ls="eza --icons -a --group-directories-first"
-
+alias rm=trash-put # run `pip install trash-cli` if not found
