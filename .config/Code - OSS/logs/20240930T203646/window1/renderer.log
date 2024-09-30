@@ -1,5 +1,0 @@
-2024-09-30 20:36:59.752 [info] Started local extension host with pid 111643.
-2024-09-30 20:36:59.784 [info] Started initializing default profile extensions in extensions installation folder. file:///home/waifu/.vscode-oss/extensions
-2024-09-30 20:37:01.176 [info] Completed initializing default profile extensions in extensions installation folder. file:///home/waifu/.vscode-oss/extensions
-2024-09-30 20:37:01.213 [error] Error scanning extensions at /$HOME/.vscode-oss/extensions/undefined_publisher.wallbash-0.0.1: Unable to resolve nonexistent file '/$HOME/.vscode-oss/extensions/undefined_publisher.wallbash-0.0.1'
-2024-09-30 20:37:17.440 [info] [perf] Render performance baseline is 21ms
