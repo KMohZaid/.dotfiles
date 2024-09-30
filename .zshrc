@@ -1,11 +1,16 @@
+
 # Oh-my-zsh installation path
 ZSH=/usr/share/oh-my-zsh/
 
 # Powerlevel10k theme path
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+# source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
-# List of plugins used
-plugins=( git sudo zsh-256color zsh-autosuggestions zsh-syntax-highlighting )
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(git  sudo zsh-256color  zsh-autosuggestions zsh-history-substring-search zsh-you-should-use zsh-syntax-highlighting example)
 source $ZSH/oh-my-zsh.sh
 
 # In case a command is not found, try to find the package that has it
@@ -82,8 +87,22 @@ alias .5='cd ../../../../..'
 # Always mkdir a path (this doesn't inhibit functionality to make a single dir)
 alias mkdir='mkdir -p'
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# ---------------------------------------------------------------------------------------------------
+# --- CUSTOM EDITS (FOR NOW) ---
 
-# Display Pokemon
-pokemon-colorscripts --no-title -r 1,3,6
+# starship
+eval "$(starship init zsh)"
+
+# neovim as default editor
+export VISUAL=nvim
+export EDITOR=nvim
+
+# ---------------- turn green bg dir into normal, bcz it is unreadable. btw it was for telling which dir have wriote and execution permission to group/others
+export LS_COLORS="$LS_COLORS:ow=1;34:tw=1;34:"
+export PATH=$PATH:~/.local/bin
+
+# ------------ Custom Aliases
+
+alias vim=nvim
+alias ls="eza --icons -a --group-directories-first"
+
