@@ -87,6 +87,9 @@ alias .5='cd ../../../../..'
 # Always mkdir a path (this doesn't inhibit functionality to make a single dir)
 alias mkdir='mkdir -p'
 
+
+# Display Pokemon
+pokemon-colorscripts --no-title -r 1,3,6
 # ---------------------------------------------------------------------------------------------------
 # --- CUSTOM EDITS (FOR NOW) ---
 
@@ -105,4 +108,5 @@ export PATH=$PATH:~/.local/bin
 
 alias vim=nvim
 alias ls="eza --icons -a --group-directories-first"
+
 
