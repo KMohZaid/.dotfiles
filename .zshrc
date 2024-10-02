@@ -89,12 +89,15 @@ alias mkdir='mkdir -p'
 
 
 # Display Pokemon
-pokemon-colorscripts --no-title -r 1,3,6
+pokemon-colorscripts --no-title -r
 # ---------------------------------------------------------------------------------------------------
 # --- CUSTOM EDITS (FOR NOW) ---
 
 # starship
 eval "$(starship init zsh)"
+
+# xdg config home
+export XDG_CONFIG_HOME=$HOME/.config
 
 # neovim as default editor
 export VISUAL=nvim
