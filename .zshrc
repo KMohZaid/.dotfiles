@@ -88,8 +88,9 @@ alias .5='cd ../../../../..'
 alias mkdir='mkdir -p'
 
 
-# Display Pokemon
-pokemon-colorscripts --no-title -r
+# Display Pokemon (+ fastfetch)
+pokemon-colorscripts --no-title -r > /tmp/poke.txt
+fastfetch -l /tmp/poke.txt
 # ---------------------------------------------------------------------------------------------------
 # --- CUSTOM EDITS (FOR NOW) ---
 
