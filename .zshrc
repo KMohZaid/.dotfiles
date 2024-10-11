@@ -97,13 +97,6 @@ poke_name=$(head -n 1 /tmp/poke.txt)
 # capitalize first letter
 poke_name=$(tr '[:lower:]' '[:upper:]' <<< ${poke_name:0:1})${poke_name:1}
 
-# japanese name
-poke_name_jp=$(trans -source en -target ja Rhyhorn -b 2> /dev/null) # if no internet, pass error to /dev/null
-# if no error
-if [[ $? -eq 0 ]]; then
-    poke_name="$poke_name_jp ($poke_name)"
-fi
-
 jq --arg new_heading "$fastfetch_color_code   $poke_name" '.modules[0].format = $new_heading' ~/.config/fastfetch/config.jsonc > /tmp/fastfetch.tmp.json # heading will be first module
 
 sed -i '1d' /tmp/poke.txt # remove title
