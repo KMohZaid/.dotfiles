@@ -51,11 +51,15 @@
     jq
 
     floorp
+
+    pulseaudio
     
    # 
     kitty
     feh
-    polybar
+    (pkgs.polybar.override {
+      pulseSupport = true;
+    })
     flameshot
   ];
 

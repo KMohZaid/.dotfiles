@@ -20,6 +20,9 @@ in
         };
 
         keybindings = {
+          "${modifier}+e" = "exec ${pkgs.dolphin}/bin/dolphin";
+          "${modifier}+shift+f" = "exec flatpak run io.github.zen_browser.zen";
+
           # Kitty terminal
           "${modifier}+Return" = "exec kitty || i3-sensible-terminal";
 
@@ -29,6 +32,12 @@ in
           # Screenshot
           "${modifier}+Print" = "exec ${pkgs.flameshot}/bin/flameshot gui -c";
           "Print" = "exec ${pkgs.flameshot}/bin/flameshot gui";
+
+          # Use pactl to adjust volume in PulseAudio.
+          "XF86AudioRaiseVolume" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5% && killall -SIGUSR1 i3status";
+          "XF86AudioLowerVolume" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5% && killall -SIGUSR1 i3status";
+          "XF86AudioMute" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle && killall -SIGUSR1 i3status";
+          "XF86AudioMicMute" = "exec ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle && killall -SIGUSR1 i3status";
 
           # Movement
           "${modifier}+j" = "focus down";
