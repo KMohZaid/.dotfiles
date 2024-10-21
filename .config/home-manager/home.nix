@@ -53,6 +53,7 @@
     floorp
 
     pulseaudio
+    playerctl
     
    # 
     kitty

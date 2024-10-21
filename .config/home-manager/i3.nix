@@ -33,11 +33,18 @@ in
           "${modifier}+Print" = "exec ${pkgs.flameshot}/bin/flameshot gui -c";
           "Print" = "exec ${pkgs.flameshot}/bin/flameshot gui";
 
-          # Use pactl to adjust volume in PulseAudio.
+          # Audio Controller : Use pactl to adjust volume in PulseAudio.
           "XF86AudioRaiseVolume" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5% && killall -SIGUSR1 i3status";
           "XF86AudioLowerVolume" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5% && killall -SIGUSR1 i3status";
           "XF86AudioMute" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle && killall -SIGUSR1 i3status";
           "XF86AudioMicMute" = "exec ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle && killall -SIGUSR1 i3status";
+
+          # Media Player Controller
+          "XF86AudioPlay" = "exec ${pkgs.playerctl}/bin/playerctl play";
+          "XF86AudioPause" = "exec ${pkgs.playerctl}/bin/playerctl pause";
+          "XF86AudioNext" = "exec ${pkgs.playerctl}/bin/playerctl next";
+          "XF86AudioPrev" = "exec ${pkgs.playerctl}/bin/playerctl previous";
+          "XF86AudioStop" = "exec ${pkgs.playerctl}/bin/playerctl stop";
 
           # Movement
           "${modifier}+j" = "focus down";
