@@ -2,6 +2,18 @@
 
 let
   modifier = "Mod4";
+  ws_names = {
+    ws_1 = "1";
+    ws_2 = "2";
+    ws_3 = "3";
+    ws_4 = "4";
+    ws_5 = "5";
+    ws_6 = "6";
+    ws_7 = "7";
+    ws_8 = "8";
+    ws_9 = "9";
+    ws_10 = "10";
+  };
 in
 {
   xsession = {
@@ -57,15 +69,28 @@ in
           "${modifier}+Down" = "focus down";
 
           # Workspaces
-          "${modifier}+1" = "workspace number 1";
-          "${modifier}+2" = "workspace number 2";
-          "${modifier}+3" = "workspace number 3";
-          "${modifier}+4" = "workspace number 4";
-          "${modifier}+5" = "workspace number 5";
-          "${modifier}+6" = "workspace number 6";
-          "${modifier}+7" = "workspace number 7";
-          "${modifier}+8" = "workspace number 8";
-          "${modifier}+9" = "workspace number 9";
+          "${modifier}+1" = "workspace ${ws_names.ws_1}";
+          "${modifier}+2" = "workspace ${ws_names.ws_2}";
+          "${modifier}+3" = "workspace ${ws_names.ws_3}";
+          "${modifier}+4" = "workspace ${ws_names.ws_4}";
+          "${modifier}+5" = "workspace ${ws_names.ws_5}";
+          "${modifier}+6" = "workspace ${ws_names.ws_6}";
+          "${modifier}+7" = "workspace ${ws_names.ws_7}";
+          "${modifier}+8" = "workspace ${ws_names.ws_8}";
+          "${modifier}+9" = "workspace ${ws_names.ws_9}";
+          "${modifier}+0" = "workspace ${ws_names.ws_10}";
+
+          # Move container to workspace
+          "${modifier}+Shift+1" = "move container to workspace ${ws_names.ws_1}; workspace ${ws_names.ws_1}";
+          "${modifier}+Shift+2" = "move container to workspace ${ws_names.ws_2}; workspace ${ws_names.ws_2}";
+          "${modifier}+Shift+3" = "move container to workspace ${ws_names.ws_3}; workspace ${ws_names.ws_3}";
+          "${modifier}+Shift+4" = "move container to workspace ${ws_names.ws_4}; workspace ${ws_names.ws_4}";
+          "${modifier}+Shift+5" = "move container to workspace ${ws_names.ws_5}; workspace ${ws_names.ws_5}";
+          "${modifier}+Shift+6" = "move container to workspace ${ws_names.ws_6}; workspace ${ws_names.ws_6}";
+          "${modifier}+Shift+7" = "move container to workspace ${ws_names.ws_7}; workspace ${ws_names.ws_7}";
+          "${modifier}+Shift+8" = "move container to workspace ${ws_names.ws_8}; workspace ${ws_names.ws_8}";
+          "${modifier}+Shift+9" = "move container to workspace ${ws_names.ws_9}; workspace ${ws_names.ws_9}";
+          "${modifier}+Shift+0" = "move container to workspace ${ws_names.ws_10}; workspace ${ws_names.ws_10}";
 
           # Misc
           "${modifier}+shift+q" = "kill";
