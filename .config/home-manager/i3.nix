@@ -128,11 +128,6 @@ in
             always = true;
             notification = false;
           }
-          {
-            command = "${pkgs.kitty}/bin/kitty";
-            always = false;
-            notification = false;
-          }
         ];
       };
     };
