@@ -47,8 +47,7 @@ in
           "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -show drun";
 
           # Screenshot
-          "${modifier}+Print" = "exec ${pkgs.flameshot}/bin/flameshot gui -c";
-          "Print" = "exec ${pkgs.flameshot}/bin/flameshot gui";
+          "Print" = "exec \"pkill flameshot ; ${pkgs.flameshot}/bin/flameshot gui\"";
 
           # Audio Controller : Use pactl to adjust volume in PulseAudio.
           "XF86AudioRaiseVolume" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5% && killall -SIGUSR1 i3status";
