@@ -52,6 +52,8 @@
 
     floorp
 
+    picom
+
     pulseaudio
     playerctl
     
@@ -101,6 +103,23 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  # Picom compositor
+  services.picom = {
+    enable = true;
+    opacityRules = [
+      "90:class_g = 'kitty'"
+    ];
+
+    wintypes ={
+      tooltip = { fade = true; shadow = true; opacity = 0.95; focus = true; full-shadow = false; };
+      dock = { shadow = false; opacity = 0.8; };
+      dnd = { shadow = false; };
+      menu = { shadow = false; };
+      popup_menu = { opacity = 0.95; };
+      dropdown_menu = { opacity = 0.8; };
+    };
+  };
 
 
   imports = [
