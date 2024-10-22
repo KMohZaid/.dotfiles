@@ -31,6 +31,11 @@ in
           hideEdgeBorders = "both";
         };
 
+        gaps = {
+          inner = 10;
+          outer = 1;
+        };
+
         keybindings = {
           "${modifier}+e" = "exec ${pkgs.dolphin}/bin/dolphin";
           "${modifier}+shift+f" = "exec flatpak run io.github.zen_browser.zen";
