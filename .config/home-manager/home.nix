@@ -60,6 +60,7 @@
    # 
     kitty
     feh
+    rofi
     (pkgs.polybar.override {
       pulseSupport = true;
     })
