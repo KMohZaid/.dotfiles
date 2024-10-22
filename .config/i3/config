@@ -1,0 +1,117 @@
+# Set the modifier key
+set $mod Mod4
+
+# Font configuration
+font pango:DejaVu Sans Mono 8
+
+# Floating window settings
+floating_modifier Mod4
+
+# Workspace layout
+workspace_layout default
+workspace_auto_back_and_forth no
+
+# Window border settings (also hide title bar)
+# will die in future, so will use default_border and default_floating_border
+for_window [class="^.*"] border pixel 2 
+
+# Colors for client windows
+# IDK WHYYYYYYYY, not working
+                          # class                 border  backgr. text    indicator child_border
+for_window [class="^.*"] client.focused          #77dd77 #285577 #ffffff #2e9ef4   #285577
+
+# Define workspaces
+set $ws_1 1
+set $ws_2 2
+set $ws_3 3
+set $ws_4 4
+set $ws_5 5
+set $ws_6 6
+set $ws_7 7
+set $ws_8 8
+set $ws_9 9
+set $ws_10 10
+
+
+# Configure gaps
+gaps inner 10
+gaps outer 1
+
+# Keybindings
+bindsym $mod+e exec dolphin
+bindsym $mod+Shift+f exec zen-alpha || flatpak run io.github.zen_browser.zen
+bindsym $mod+Return exec kitty || i3-sensible-terminal
+bindsym $mod+d exec rofi -show drun
+bindsym Print exec "pkill flameshot; flameshot gui"
+
+# Audio controls
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+# Media player controls
+bindsym XF86AudioPlay exec playerctl play
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioStop exec playerctl stop
+
+# Movement
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+h focus left
+bindsym $mod+l focus right
+bindsym $mod+Left focus left
+bindsym $mod+Right focus right
+bindsym $mod+Up focus up
+bindsym $mod+Down focus down
+
+# Workspaces
+bindsym $mod+1 workspace $ws_1
+bindsym $mod+2 workspace $ws_2
+bindsym $mod+3 workspace $ws_3
+bindsym $mod+4 workspace $ws_4
+bindsym $mod+5 workspace $ws_5
+bindsym $mod+6 workspace $ws_6
+bindsym $mod+7 workspace $ws_7
+bindsym $mod+8 workspace $ws_8
+bindsym $mod+9 workspace $ws_9
+bindsym $mod+0 workspace $ws_10
+
+# Move container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws_1; workspace $ws_1
+bindsym $mod+Shift+2 move container to workspace $ws_2; workspace $ws_2
+bindsym $mod+Shift+3 move container to workspace $ws_3; workspace $ws_3
+bindsym $mod+Shift+4 move container to workspace $ws_4; workspace $ws_4
+bindsym $mod+Shift+5 move container to workspace $ws_5; workspace $ws_5
+bindsym $mod+Shift+6 move container to workspace $ws_6; workspace $ws_6
+bindsym $mod+Shift+7 move container to workspace $ws_7; workspace $ws_7
+bindsym $mod+Shift+8 move container to workspace $ws_8; workspace $ws_8
+bindsym $mod+Shift+9 move container to workspace $ws_9; workspace $ws_9
+bindsym $mod+Shift+0 move container to workspace $ws_10; workspace $ws_10
+
+# Miscellaneous
+bindsym $mod+Shift+q kill
+bindsym $mod+f fullscreen toggle
+bindsym $mod+z split h
+bindsym $mod+x split v
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+r reload
+bindsym $mod+Shift+c restart
+
+# Resize mode
+mode "resize" {
+    bindsym h resize grow width 10 px or 10 ppt
+    bindsym j resize shrink height 10 px or 10 ppt
+    bindsym k resize grow height 10 px or 10 ppt
+    bindsym l resize shrink width 10 px or 10 ppt
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode resize
+
+# Startup commands
+exec_always --no-startup-id feh --bg-fill ~/.background.png
+exec_always --no-startup-id ~/.config/polybar/launch.sh
+exec --no-startup-id xbanish
+

@@ -122,7 +122,7 @@
   };
 
 
+  home.file.".background.png".source = ./background.png;
   imports = [
-    ./i3.nix
   ];
 }
