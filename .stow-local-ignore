@@ -29,3 +29,4 @@ omz-.*\.sh$ # ignore omz-*.sh scripts that i made for installing plugins i want
 install.sh
 pkg.txt
 .custom_scripts
+NixOS
