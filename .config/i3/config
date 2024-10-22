@@ -39,7 +39,7 @@ gaps outer 1
 
 # Keybindings
 bindsym $mod+e exec dolphin
-bindsym $mod+Shift+f exec zen-alpha || flatpak run io.github.zen_browser.zen
+bindsym $mod+Shift+f exec zen-browser || flatpak run io.github.zen_browser.zen
 bindsym $mod+Return exec kitty || i3-sensible-terminal
 bindsym $mod+d exec rofi -show drun
 bindsym Print exec "pkill flameshot; flameshot gui"
