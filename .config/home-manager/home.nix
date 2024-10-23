@@ -53,6 +53,9 @@
     floorp
 
     picom
+    dunst
+
+    telegram-desktop
 
     pulseaudio
     playerctl
@@ -122,8 +125,8 @@
     };
   };
 
-
   home.file.".background.png".source = ./background.png;
   imports = [
+    ./dunst.nix
   ];
 }
