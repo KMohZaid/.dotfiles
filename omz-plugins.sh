@@ -1,14 +1,15 @@
 #!/bin/zsh
 
 if [[ -z "$1" ]]; then
-    echo "Usage: $0 <path to oh-my-zsh>"
+    echo "Usage: $0 <path to oh-my-zsh custom>"
     echo "Example: "
-    echo "        1. $0 $ZSH # if running from zsh shell, best option"
-    echo "        2. $0 /usr/share/oh-my-zsh # oh-my-zsh installed by package manager"
-    echo "        3. $0 ~/.oh-my-zsh # normal git install"
+    echo "        1. $0 \$ZSH_CUSTOM # if running from zsh shell, best option"
+    echo "        2. $0 /usr/share/oh-my-zsh/custom/ # oh-my-zsh installed by package manager"
+    echo "        3. $0 ~/.oh-my-zsh/custom/ # normal git install"
+    echo "      -------------------------------------------------------"
+    echo "        4. $0 ~/.oh-my-zsh_custom/ # if you can't write to access oh-my-zsh folder , eg. nixos "
     exit 1
 fi
-ZSH_CUSTOM="$1/custom"
 
 # zsh-autosuggestion
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
