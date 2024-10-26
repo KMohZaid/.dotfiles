@@ -92,18 +92,41 @@ alias mkdir='mkdir -p'
 
 
 # Display Pokemon (+ fastfetch)
-pokemon-colorscripts -r > /tmp/poke.txt # not specifing --no-title because we will use title as heading of fastfetch
+display_pokemon_fastfetch() {
+    local poke_name=""
+    local fastfetch_color_code=$(echo -e "\u001b[36m") # using var because jq escaping "\"
 
-fastfetch_color_code=$(echo -e "\u001b[36m") # using var because jq escaping "\"
+    # Parse arguments
+    while [[ "$#" -gt 0 ]]; do
+        case $1 in
+            -n) poke_name="$2"; shift ;;
+            *) echo "Unknown parameter passed: $1"; return 1 ;;
+        esac
+        shift
+    done
 
-poke_name=$(head -n 1 /tmp/poke.txt)
-# capitalize first letter
-poke_name=$(tr '[:lower:]' '[:upper:]' <<< ${poke_name:0:1})${poke_name:1}
+    if [[ -n "$poke_name" ]]; then
+        pokemon-colorscripts -n "$poke_name" > /tmp/poke.txt
+    else
+        pokemon-colorscripts -r > /tmp/poke.txt
+    fi
 
-jq --arg new_heading "$fastfetch_color_code   $poke_name" '.modules[0].format = $new_heading' ~/.config/fastfetch/config.jsonc > /tmp/fastfetch.tmp.json # heading will be first module
+    poke_name=$(head -n 1 /tmp/poke.txt) # i know i am resetting poke_name even when it is set by arg, but it is okay
 
-sed -i '1d' /tmp/poke.txt # remove title
-fastfetch -l /tmp/poke.txt -c /tmp/fastfetch.tmp.json # display pokemon and its name 
+    # capitalize first letter
+    poke_name=$(tr '[:lower:]' '[:upper:]' <<< ${poke_name:0:1})${poke_name:1}
+
+    jq --arg new_heading "$fastfetch_color_code   $poke_name" '.modules[0].format = $new_heading' ~/.config/fastfetch/config.jsonc > /tmp/fastfetch.tmp.json # heading will be first module
+
+
+    sed -i '1d' /tmp/poke.txt # remove title
+    fastfetch -l /tmp/poke.txt -c /tmp/fastfetch.tmp.json # display pokemon and its name
+}
+
+# Example usage:
+# display_pokemon_fastfetch -n pikachu
+display_pokemon_fastfetch
+
 # ---------------------------------------------------------------------------------------------------
 # --- CUSTOM EDITS (FOR NOW) ---
 
