@@ -381,7 +381,7 @@ exec_always --no-startup-id picom -b
 # autostart applications/services on login: #
 #############################################
 
-exec_always feh --bg-fill ~/.background.png
+exec_always --no-startup-id feh --bg-fill ~/.background.png
 #get auth work with polkit-gnome
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
