@@ -1,7 +1,7 @@
 #!/bin/bash
 
-browser=zen-browser
-browser_ps_name="zen-bin"
+browser=floorp
+browser_ps_name="floorp"
 
 
 if [ "$1" = "--no-new" ]; then
