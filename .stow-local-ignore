@@ -26,3 +26,4 @@ _darcs
 # ------------------ CUSTOM
 
 omz-.*\.sh$ # ignore omz-*.sh scripts that i made for installing plugins i want
+HyDE
