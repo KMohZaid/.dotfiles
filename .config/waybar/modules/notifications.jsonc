@@ -1,0 +1,10 @@
+"custom/notifications": {
+    "format": "{} 󰂚 ",
+    "rotate": ${r_deg},
+    "exec": "swaync-client -c;echo ; echo Notifications",
+    "on-click": "swaync-widgets; swaync-client -op",
+    "on-click-right": "swaync-widgets; swaync-client -op",
+    "on-click-middle": "swaync-widgets; swaync-client -op",
+    "interval": 10,
+    "tooltip": true
+},
