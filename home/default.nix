@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
 
@@ -53,6 +53,7 @@
       telegram-desktop
       qbittorrent # torrent client, best one for me. good for having ios file downloaded with resume
       motrix # download manager(aria2c) and torrent client, best at download. good torrent client but more like downloader only
+      aria2 # downloader, 
 
       ncdu # better than du, there was another cli tool which had statistic and also use ncdu in background. forgot name
 
