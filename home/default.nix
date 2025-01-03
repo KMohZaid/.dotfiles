@@ -6,6 +6,15 @@
 
   programs.plasma = { enable = true; };
 
+   nixpkgs.config.allowUnfreePredicate = 
+    pkg: builtins.elem (lib.getName pkg) [
+             "obsidian"
+           ];
+  nixpkgs.config.permittedInsecurePackages = [
+                "electron-27.3.11"
+              ];
+         
+
   home.file = {
     ".config/kitty" = {
       source = ../Configs/kitty;
@@ -35,6 +44,9 @@
       git # essential
 
       libreoffice # office
+      obsidian # cool note taking app, closed source...
+      logseq # obsidian alternative, also open source but bullet point notes :(. they are good but i take paragraph notes more
+
       vesktop # discord
       floorp # browser (firefox fork)
       firefox # firefox browser, better keep more browser, useful maybe(i know about:profiles, but different browser as whole)
