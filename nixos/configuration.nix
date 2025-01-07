@@ -25,7 +25,7 @@
   networking.networkmanager.enable = true;
 
   # Set your time zone.
-  time.timeZone = "Asia/Kolkata";
+  time.timeZone = "America/Vancouver";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_IN";
