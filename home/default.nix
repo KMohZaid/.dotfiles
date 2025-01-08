@@ -69,6 +69,7 @@
       deno
       python3
       python3Packages.pip
+      sshpass
 
       # Plasma stuff
       sweet-nova
