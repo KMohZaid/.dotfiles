@@ -8,6 +8,10 @@
   programs.plasma = {
     enable = true;
 
+    shortcuts = {
+      "services/org.kde.spectacle.desktop"."RectangularRegionScreenShot" = ["Meta+Shift+Print" "Print"];
+    };
+
     workspace = {
       theme = "Sweet";
       lookAndFeel = "Sweet";
