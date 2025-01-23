@@ -6,14 +6,9 @@
 
   programs.plasma = { enable = true; };
 
-   nixpkgs.config.allowUnfreePredicate = 
-    pkg: builtins.elem (lib.getName pkg) [
-             "obsidian"
-           ];
-  nixpkgs.config.permittedInsecurePackages = [
-                "electron-27.3.11"
-              ];
-         
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) [ "obsidian" ];
+  nixpkgs.config.permittedInsecurePackages = [ "electron-27.3.11" ];
 
   home.file = {
     ".config/kitty" = {

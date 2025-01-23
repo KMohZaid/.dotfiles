@@ -143,7 +143,8 @@
   nix.settings.experimental-features = [ "flakes" "nix-command" ];
 
   # Run unpatched dynamic binaries on NixOS ::: https://nix.dev/guides/faq#how-to-run-non-nix-executables 
-  programs.nix-ld.enable = true; # needed as some tool like nvim plugin have some binaries ~~# disabled for now, as not needed for now~~
+  programs.nix-ld.enable =
+    true; # needed as some tool like nvim plugin have some binaries ~~# disabled for now, as not needed for now~~
 
   # Fonts
   fonts.packages = with pkgs; [
@@ -156,7 +157,6 @@
   #   # Force udisks2 to use ntfs-3g instead of ntfs3 kernel driver for better compatibility
   #   SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs-3g"
   # '';
-
 
   # Enable nh (yanh, yet another nix helper)
   programs.nh = {
