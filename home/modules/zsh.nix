@@ -47,6 +47,15 @@
       setopt SHARE_HISTORY
       unsetopt EXTENDED_HISTORY
 
+      # Fix nvim workspace stays in current directory instead of going to argument path
+      nvim() {
+          if [[ $# -eq 1 && -d $1 ]]; then
+              sh -c "cd $1; nvim"
+          else
+              command nvim "$@"
+          fi
+      }
+
       # Display Pokemon (+ fastfetch)
       display_pokemon_fastfetch() {
           local poke_name=""

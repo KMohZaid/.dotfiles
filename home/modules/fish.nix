@@ -28,6 +28,16 @@
     ];
 
     functions = {
+      # Fix nvim workspace stays in current directory instead of going to argument path
+      nvim = {
+        body = ''
+          if test (count $argv) -eq 1; and test -d $argv[1]
+            sh -c "cd $argv[1]; nvim"
+          else
+            command nvim $argv
+          end
+        '';
+      };
       display_pokemon_fastfetch = {
         body = ''
           set poke_name ""
