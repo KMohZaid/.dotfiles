@@ -75,6 +75,7 @@
       go
       clang
       ripgrep
+      tree
 
       # fun stuff
       fastfetch
