@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ customConfig, config, pkgs, lib, ... }:
 
 {
 
@@ -15,11 +15,9 @@
       source = ../Configs/kitty;
       recursive = true;
     };
-    # NOTE: because nix flake ignore submodule, it cant see nvim folder, so git cloning it directly into .config folder
-    # ".config/nvim" = {
-    #  source = ../Configs/nvim;
-    #  recursive = true;
-    # };
+    ".config/nvim" = { 
+      source = config.lib.file.mkOutOfStoreSymlink "${customConfig.NIX_FLAKE_DIR_ABSOLUTE_PATH}/Configs/nvim";
+    };
     ".config/starship.toml" = {
       source = ../Configs/starship.toml;
       recursive = true;

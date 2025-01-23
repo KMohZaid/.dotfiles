@@ -29,7 +29,15 @@
           #       thank to 
           #       proper large example -> https://github.com/nix-community/plasma-manager/issues/14#issuecomment-1568943342
           #       minimal example on how it can work -> https://github.com/nix-community/plasma-manager/issues/14#issuecomment-1876875832
-          extraSpecialArgs = { inherit plasma-manager; };
+          extraSpecialArgs = { 
+            inherit plasma-manager; 
+
+            # INFO: Custom config variables, mainly passing hardcoded flake dir so we can make symlink to nvim folder
+            #      i hate that nix doesn't copy folder with .git folder in its nix store and even if does, we can't make it reflect changes to actual config repo path
+            customConfig = {
+              NIX_FLAKE_DIR_ABSOLUTE_PATH = "/home/waifu/.dotfiles/"; # TODO: do something for dynamic path of flake dir, maybe i store it at ~/nix-config ...
+            };
+          };
         };
       };
     };
