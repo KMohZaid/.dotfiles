@@ -62,7 +62,7 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -143,7 +143,7 @@
   nix.settings.experimental-features = [ "flakes" "nix-command" ];
 
   # Run unpatched dynamic binaries on NixOS ::: https://nix.dev/guides/faq#how-to-run-non-nix-executables 
-  programs.nix-ld.enable = false; # disabled for now, as not needed for now
+  programs.nix-ld.enable = true; # needed as some tool like nvim plugin have some binaries ~~# disabled for now, as not needed for now~~
 
   # Fonts
   fonts.packages = with pkgs; [
@@ -151,9 +151,24 @@
     nerd-fonts.jetbrains-mono
   ];
 
-  # Udev rules
-  services.udev.extraRules = ''
-    # Force udisks2 to use ntfs-3g instead of ntfs3 kernel driver for better compatibility
-    SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs-3g"
-  '';
+  # Udev rules # XXX: disabled for now, ntfs-3g keep ownership to root and lutris/wine doesn't work with it(they want game wine folder to be owned by user)...
+  # services.udev.extraRules = ''
+  #   # Force udisks2 to use ntfs-3g instead of ntfs3 kernel driver for better compatibility
+  #   SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs-3g"
+  # '';
+
+
+  # Enable nh (yanh, yet another nix helper)
+  programs.nh = {
+    enable = true;
+    clean = { # Run `nh clean` as service
+      enable = true;
+      extraArgs = "--keep-since 7d --keep 5"; # keep last 7 days and 5 versions
+    };
+    flake =
+      "/home/waifu/.dotfiles"; # location of flake # TODO: make it dynamically take somehow when run nixos switch, so we can have changable path
+  };
+
+  # Enable bluetooth
+  hardware.bluetooth.enable = true;
 }
