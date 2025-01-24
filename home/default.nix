@@ -2,7 +2,13 @@
 
 {
 
-  imports = [ ./modules/plasma.nix ./modules/zsh.nix ./modules/fish.nix ];
+  imports = [
+    ./modules/plasma.nix
+    ./modules/zsh.nix
+    ./modules/fish.nix
+    ./modules/an-anime-game-launcher.nix
+    ./modules/lemonade.nix # Remote utility tool that to copy, paste and open browsers over TCP/SSH
+  ];
 
   programs.plasma = { enable = true; };
 
@@ -77,6 +83,8 @@
 
       wl-clipboard-rs # clipboard manager for wayland, this onee is rust implementation of wl-clipboard and upto date...
       xclip # x11 clipboard manager
+
+      gparted # gui disk partitioning
 
       # fun stuff
       fastfetch

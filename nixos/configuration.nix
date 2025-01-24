@@ -109,6 +109,8 @@
     home-manager
     zsh
     fish
+
+    cachix
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #  wget
   ];
@@ -171,4 +173,10 @@
 
   # Enable bluetooth
   hardware.bluetooth.enable = true;
+
+  # Setup cachix
+  nix.settings = {
+    substituters = [ "https://ezkea.cachix.org" ];
+    trusted-public-keys = [ "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI=" ];
+  };
 }
