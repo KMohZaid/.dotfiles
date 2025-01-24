@@ -75,6 +75,9 @@
       ripgrep
       tree
 
+      wl-clipboard-rs # clipboard manager for wayland, this onee is rust implementation of wl-clipboard and upto date...
+      xclip # x11 clipboard manager
+
       # fun stuff
       fastfetch
       neofetch
