@@ -58,6 +58,9 @@
       aria2 # downloader,
       tor # tor ... for educational purpose and onion technique experiments
       tor-browser # tor... for educational purpose and onion technique experiments
+      mullvad-vpn # vpn
+
+      btop # system monitor
 
       ncdu # better than du, there was another cli tool which had statistic and also use ncdu in background. forgot name
       mpv # video player

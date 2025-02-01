@@ -3,7 +3,7 @@ let
 in
 {
   home.packages = with aagl-gtk-on-nix; [
-    anime-games-launcher-unwrapped # all of them together...
+    # anime-games-launcher-unwrapped # all of them together... # outdated, better use standalone for each game
     an-anime-game-launcher # genshin
     honkers-launcher # honkai
   ];
