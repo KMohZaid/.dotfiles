@@ -1,5 +1,8 @@
 { customConfig, config, pkgs, lib, ... }:
 
+let
+  sourceConfigFolder = customConfig.NIX_FLAKE_DIR_ABSOLUTE_PATH + "/Configs";
+in
 {
 
   imports = [
@@ -21,8 +24,9 @@
       source = ../Configs/kitty;
       recursive = true;
     };
-    ".config/nvim" = { 
-      source = config.lib.file.mkOutOfStoreSymlink "${customConfig.NIX_FLAKE_DIR_ABSOLUTE_PATH}/Configs/nvim";
+    ".config/nvim" = {
+      source = config.lib.file.mkOutOfStoreSymlink
+        "${sourceConfigFolder}/nvim";
     };
     ".config/starship.toml" = {
       source = ../Configs/starship.toml;
