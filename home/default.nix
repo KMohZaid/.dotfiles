@@ -124,6 +124,13 @@ in
     enable = true;
     userEmail = "68484509+KMohZaid@users.noreply.github.com";
     userName = "KMohZaid";
+    extraConfig = {
+      gpg = { format = "ssh"; };
+      user = { signingKey = "~/.ssh/github_rsa.key"; };
+      commit = {
+        gpgsign = true; # auto sign commits without -S
+      };
+    };
   };
 
 }
