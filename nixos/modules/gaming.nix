@@ -30,19 +30,19 @@
 
   # Genshin Impact Telemetry disable
   networking.extraHosts = ''
-      # Global version
-      # Genshin logging servers (do not remove!)
-      0.0.0.0 sg-public-data-api.hoyoverse.com
-      0.0.0.0 log-upload-os.hoyoverse.com
+    # Global version
+    # Genshin logging servers (do not remove!)
+    0.0.0.0 sg-public-data-api.hoyoverse.com
+    0.0.0.0 log-upload-os.hoyoverse.com
 
-      # Some old global logging servers
-      0.0.0.0 log-upload-os.mihoyo.com
-      0.0.0.0 overseauspider.yuanshen.com
+    # Some old global logging servers
+    0.0.0.0 log-upload-os.mihoyo.com
+    0.0.0.0 overseauspider.yuanshen.com
 
-      # Chinese version
-      # Genshin logging servers (do not remove!)
-      0.0.0.0 public-data-api.mihoyo.com
-      0.0.0.0 log-upload.mihoyo.com
-    '';
+    # Chinese version
+    # Genshin logging servers (do not remove!)
+    0.0.0.0 public-data-api.mihoyo.com
+    0.0.0.0 log-upload.mihoyo.com
+  '';
 }
 

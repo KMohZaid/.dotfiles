@@ -1,4 +1,3 @@
-
 { config, pkgs, ... }:
 
 {
@@ -14,7 +13,5 @@
   };
 
   # Ensure lemonade is installed
-  home.packages = [
-    pkgs.lemonade
-  ];
+  home.packages = [ pkgs.lemonade ];
 }

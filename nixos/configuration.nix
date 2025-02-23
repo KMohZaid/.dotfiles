@@ -185,13 +185,12 @@
   # Setup cachix
   nix.settings = {
     substituters = [ "https://ezkea.cachix.org" ];
-    trusted-public-keys = [ "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI=" ];
+    trusted-public-keys =
+      [ "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI=" ];
   };
 
   # Enable Samba
-  services.samba = {
-    enable = true;
-  };
+  services.samba = { enable = true; };
 
   # Enable kvm for osx-kvm
   virtualisation.libvirtd.enable = true;
