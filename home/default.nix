@@ -16,7 +16,7 @@ in
   programs.plasma = { enable = true; };
 
   nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [ "obsidian" ];
+    builtins.elem (lib.getName pkg) [ "obsidian" "vscode" ];
   nixpkgs.config.permittedInsecurePackages = [ "electron-27.3.11" ];
 
   home.file = {
@@ -37,6 +37,8 @@ in
       recursive = true;
     };
   };
+
+  programs.vscode = { enable = true; };
 
   home = {
     stateVersion = "24.11";
@@ -63,8 +65,15 @@ in
       tor # tor ... for educational purpose and onion technique experiments
       tor-browser # tor... for educational purpose and onion technique experiments
       mullvad-vpn # vpn
+      rclone # cloud sync
+      lsof # list files opened by process
 
+      gimp # image editor
+
+      zip # archiver
+      file # file info
       btop # system monitor
+      sqlitebrowser # sqlite database browser
 
       ncdu # better than du, there was another cli tool which had statistic and also use ncdu in background. forgot name
       mpv # video player
@@ -75,6 +84,7 @@ in
       jq # json parsing/querying
       pokemon-colorscripts-mac # pokemon color scripts
       neovim
+      luarocks
       pnpm
       cargo
       nodejs
@@ -84,7 +94,7 @@ in
       sshpass
       unzip
       go
-      clang
+      gcc
       ripgrep
       tree
 
