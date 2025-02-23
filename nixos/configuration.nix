@@ -85,7 +85,7 @@
   users.users.waifu = {
     isNormalUser = true;
     description = "Waifu";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "wireshark" ];
     packages = with pkgs;
       [
         kdePackages.kate
@@ -106,6 +106,7 @@
     vim
     neovim
     git
+    gcc
 
     home-manager
     zsh
