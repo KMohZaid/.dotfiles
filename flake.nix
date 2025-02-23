@@ -5,17 +5,27 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager";
     plasma-manager.url = "github:nix-community/plasma-manager";
+    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };
 
-  outputs = { self, nixpkgs, home-manager, plasma-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, plasma-manager, ... }:
     let
       system = "x86_64-linux"; # Change as necessary
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ inputs.hyprpanel.overlay ];
+      };
     in {
       nixosConfigurations = {
         "nixos" = nixpkgs.lib.nixosSystem {
           system = system;
-          modules = [ ./nixos/configuration.nix ];
+          specialArgs = { inherit inputs; };
+          modules = [
+            # Pass nixpkgs overlays to nixosSystem, directly passing pkgs in specialArgs cause nixpkgs.config to not apply from nixos configuration.nix module
+            ({ config, pkgs, ... }: {
+              nixpkgs.overlays = [inputs.hyprpanel.overlay];
+            })
+            ./nixos/configuration.nix ];
         };
       };
 

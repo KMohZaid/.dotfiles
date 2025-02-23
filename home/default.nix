@@ -6,14 +6,14 @@ in
 {
 
   imports = [
-    ./modules/plasma.nix
+    #./modules/plasma.nix
     ./modules/zsh.nix
     ./modules/fish.nix
     ./modules/an-anime-game-launcher.nix
     ./modules/lemonade.nix # Remote utility tool that to copy, paste and open browsers over TCP/SSH
   ];
 
-  programs.plasma = { enable = true; };
+  #programs.plasma = { enable = true; };
 
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [ "obsidian" "vscode" ];
@@ -27,6 +27,10 @@ in
     ".config/nvim" = {
       source = config.lib.file.mkOutOfStoreSymlink
         "${sourceConfigFolder}/nvim";
+    };
+    ".config/hypr" = {
+      source = config.lib.file.mkOutOfStoreSymlink
+        "${sourceConfigFolder}/hypr";
     };
     ".config/starship.toml" = {
       source = ../Configs/starship.toml;
@@ -111,8 +115,8 @@ in
       hollywood
 
       # Plasma stuff
-      sweet-nova
-      sweet-folders
+      #sweet-nova
+      #sweet-folders
     ];
   };
 

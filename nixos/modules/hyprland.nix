@@ -1,6 +1,4 @@
-{ config, pkgs, ... }:
-
-{
+{ config, pkgs, ... }: {
   programs.hyprland = {
     enable = true;
     # nvidiaPatches = true; # no longer needed
@@ -14,6 +12,38 @@
     # Hint electron apps to use wayland
     NIXOS_OZONE_WL = "1";
   };
+
+  environment.systemPackages = with pkgs; [
+    wofi
+    brightnessctl
+
+    hyprpanel
+    # required by hyprpanel and needed without it
+    ags # nix package name for aur "aylurs-gtk-shell-git"
+    wireplumber
+    libgtop
+    bluez
+    bluez-tools # i guess nix package name for aur "bluez-utils"
+    networkmanager # needed without it
+    networkmanagerapplet # not needed but using because hyprpanel bar network module is broken
+    dart-sass
+    wl-clipboard # needed without it
+    upower
+    gvfs
+
+    # icons
+    adwaita-icon-theme # Default GNOME icons
+    gnome-icon-theme
+    gnome-themes-extra
+
+    # other cool stuff
+    swaylock
+    swaylock-effects
+    wlogout
+    swayidle
+  ];
+
+  services.upower.enable = true;
 
   hardware = {
     # Opengl
