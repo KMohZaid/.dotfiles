@@ -202,4 +202,16 @@
     options kvm_intel emulate_invalid_guest_state=0
     options kvm ignore_msrs=1
   '';
+
+  # docker
+  virtualisation.docker = {
+    enable = true;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
+  };
+
+  # Wireshark
+  programs.wireshark.enable = true;
 }
