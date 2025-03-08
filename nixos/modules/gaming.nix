@@ -1,10 +1,12 @@
 { config, lib, pkgs, ... }:
 
 {
+  # Nvidia ...
+  services.xserver.videoDrivers = [ "nvidia" ];
   # Enable Steam 
   # steam package are unfree license, this will only allow them, instead of allowing all unfree package
   nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [ "steam" "steam-unwrapped" ];
+    builtins.elem (lib.getName pkg) [ "steam" "steam-unwrapped" "nvidia-x11" "nvidia-settings" ];
   programs.steam.enable = true;
 
   environment.systemPackages = with pkgs; [
