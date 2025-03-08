@@ -41,6 +41,10 @@
     swaylock-effects
     wlogout
     swayidle
+
+    # needed stuff
+    dolphin
+    (flameshot.override { enableWlrSupport = true; })
   ];
 
   services.upower.enable = true;
