@@ -44,6 +44,7 @@
 
     # needed stuff
     dolphin
+    xfce.thunar
     (flameshot.override { enableWlrSupport = true; })
   ];
 
