@@ -31,7 +31,7 @@
           modules = [
             # Pass nixpkgs overlays to nixosSystem, directly passing pkgs in specialArgs cause nixpkgs.config to not apply from nixos configuration.nix module
             ({ config, pkgs, ... }: {
-              nixpkgs.overlays = [inputs.hyprpanel.overlay];
+              nixpkgs.overlays = [ inputs.hyprpanel.overlay ];
             })
             ./nixos/configuration.nix
 

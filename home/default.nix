@@ -1,9 +1,7 @@
 { customConfig, config, pkgs, lib, ... }:
 
-let
-  sourceConfigFolder = customConfig.NIX_FLAKE_DIR_ABSOLUTE_PATH + "/Configs";
-in
-{
+let sourceConfigFolder = customConfig.NIX_FLAKE_DIR_ABSOLUTE_PATH + "/Configs";
+in {
 
   imports = [
     #./modules/plasma.nix
@@ -25,12 +23,10 @@ in
       recursive = true;
     };
     ".config/nvim" = {
-      source = config.lib.file.mkOutOfStoreSymlink
-        "${sourceConfigFolder}/nvim";
+      source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/nvim";
     };
     ".config/hypr" = {
-      source = config.lib.file.mkOutOfStoreSymlink
-        "${sourceConfigFolder}/hypr";
+      source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/hypr";
     };
     ".config/starship.toml" = {
       source = ../Configs/starship.toml;
