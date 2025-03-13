@@ -171,6 +171,9 @@
   #   SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs-3g"
   # '';
 
+  # Enable udisks2
+  services.udisks2.enable = true;
+
   # Enable nh (yanh, yet another nix helper)
   programs.nh = {
     enable = true;
