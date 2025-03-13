@@ -52,7 +52,7 @@
     true; # SDDM :::: idk why sddm-helper crashing suddenly
   services.displayManager.sddm.wayland.enable = true;
   services.displayManager.ly.enable = false; # Ly
-  services.desktopManager.plasma6.enable = false;
+  services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {

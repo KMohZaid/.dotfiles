@@ -4,7 +4,7 @@ let sourceConfigFolder = customConfig.NIX_FLAKE_DIR_ABSOLUTE_PATH + "/Configs";
 in {
 
   imports = [
-    #./modules/plasma.nix
+    ./modules/plasma.nix
     ./modules/zsh.nix
     ./modules/fish.nix
     ./modules/an-anime-game-launcher.nix
@@ -111,8 +111,8 @@ in {
       hollywood
 
       # Plasma stuff
-      #sweet-nova
-      #sweet-folders
+      sweet-nova
+      sweet-folders
     ];
   };
 
