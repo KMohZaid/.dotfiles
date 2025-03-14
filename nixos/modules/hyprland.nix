@@ -42,7 +42,7 @@
     swayidle
 
     # needed stuff
-    #    dolphin
+    apple-cursor
     xfce.thunar
     libnotify
     (flameshot.override { enableWlrSupport = true; })

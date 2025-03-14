@@ -34,6 +34,7 @@
             # Pass nixpkgs overlays to nixosSystem, directly passing pkgs in specialArgs cause nixpkgs.config to not apply from nixos configuration.nix module
             ({ config, pkgs, ... }: {
               nixpkgs.overlays = [ inputs.hyprpanel.overlay ];
+              nixpkgs.config.allowUnfree = true;
             })
             ./nixos/configuration.nix
 
@@ -66,7 +67,11 @@
       homeConfigurations = {
         "waifu" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          modules = [ ./home/default.nix ];
+          modules = [
+            ({ config, pkgs, ... }: {
+              nixpkgs.config.allowUnfree = true;  # Enable unfree packages in Home Manager
+            })
+            ./home/default.nix ];
           # INFO: Plasma-manager
           #       Pass the plasma-manager module to the home-manager configuration
           #   
