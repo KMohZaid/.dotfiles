@@ -37,7 +37,6 @@
     gnome-themes-extra
 
     # other cool stuff
-    swaylock
     swaylock-effects
     wlogout
     swayidle

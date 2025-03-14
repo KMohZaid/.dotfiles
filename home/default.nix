@@ -28,6 +28,9 @@ in {
     ".config/hypr" = {
       source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/hypr";
     };
+    ".config.swaylock" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/swaylock";
+    };
     ".config/starship.toml" = {
       source = ../Configs/starship.toml;
       recursive = true;
