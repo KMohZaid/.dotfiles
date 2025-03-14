@@ -44,6 +44,7 @@
     # needed stuff
     #    dolphin
     xfce.thunar
+    libnotify
     (flameshot.override { enableWlrSupport = true; })
     # Gnome PolKit Agent for Hyprland
     (pkgs.writeScriptBin "polkit-authentication-agent-1" ''

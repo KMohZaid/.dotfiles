@@ -28,6 +28,9 @@ in {
     ".config/hypr" = {
       source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/hypr";
     };
+    ".config/wlogout" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/wlogout";
+    };
     ".config.swaylock" = {
       source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/swaylock";
     };
