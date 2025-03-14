@@ -4,7 +4,8 @@
 }
 
 window {
-  background-color: rgba(12, 12, 12, 0.9);
+  /* 0 = transparent, because using blur in hyprland */
+  background-color: rgba(12, 12, 12, 0);
 }
 
 button {
@@ -12,7 +13,7 @@ button {
   border-color: black;
   text-decoration-color: #ffffff;
   color: #ffffff;
-  background-color: #1e1e1e;
+  background-color: inherit; /* transparent background  for button */
   border-style: solid;
   border-width: 1px;
   background-repeat: no-repeat;
