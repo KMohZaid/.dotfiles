@@ -46,6 +46,11 @@
     #    dolphin
     xfce.thunar
     (flameshot.override { enableWlrSupport = true; })
+    # Gnome PolKit Agent for Hyprland
+    (pkgs.writeScriptBin "polkit-authentication-agent-1" ''
+      #!/usr/bin/env bash
+      ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 $@
+      '')
 
     # dolphin fixes
     # thumbnails icon
@@ -60,10 +65,6 @@
 
   services.upower.enable = true;
 
-  # KDE PolKit Agent for Hyprland
-  environment.shellAliases = {
-    polkit-kde-authentication-agent-1 = "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1";
-  };
 
 
   hardware = {
