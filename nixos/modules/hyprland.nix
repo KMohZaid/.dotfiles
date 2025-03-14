@@ -60,6 +60,12 @@
 
   services.upower.enable = true;
 
+  # KDE PolKit Agent for Hyprland
+  environment.shellAliases = {
+    polkit-kde-authentication-agent-1 = "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1";
+  };
+
+
   hardware = {
     # Opengl
     graphics.enable = true;
