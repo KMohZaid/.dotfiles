@@ -291,7 +291,6 @@
       "katerc"."filetree"."sortRole" = 0;
       "katerc"."filetree"."viewShade" = "81,49,95";
       "kcminputrc"."Mouse"."X11LibInputXAccelProfileFlat" = true;
-      "kcminputrc"."Mouse"."cursorSize" = 32;
       "kded5rc"."Module-browserintegrationreminder"."autoload" = false;
       "kded5rc"."Module-device_automounter"."autoload" = false;
       "kdeglobals"."DirSelect Dialog"."DirSelectDialog Size" = "820,566";

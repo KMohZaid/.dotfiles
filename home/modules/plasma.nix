@@ -16,6 +16,10 @@
     workspace = {
       theme = "Sweet";
       lookAndFeel = "Sweet";
+      cursor = {
+        size = 48;
+        theme = "macOS";
+      };
       wallpaper =
         "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/ScarletTree/";
     };
