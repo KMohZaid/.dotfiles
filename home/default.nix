@@ -31,7 +31,7 @@ in {
     ".config/wlogout" = {
       source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/wlogout";
     };
-    ".config.swaylock" = {
+    ".config/swaylock" = {
       source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/swaylock";
     };
     ".config/starship.toml" = {
