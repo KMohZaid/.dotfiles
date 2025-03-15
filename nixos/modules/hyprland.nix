@@ -40,6 +40,7 @@
     swaylock-effects
     wlogout
     swayidle
+    playerctl
 
     # needed stuff
     apple-cursor
