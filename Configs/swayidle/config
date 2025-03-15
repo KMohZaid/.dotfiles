@@ -1,0 +1,15 @@
+### When in Lock Screen ###
+# after 1 minute, turn off screen
+timeout 60 "if pgrep swaylock; then hyprctl dispatch dpms off; fi" resume "hyprctl dispatch dpms on" 
+# after 10 minutes, sleep
+timeout 600 "if pgrep swaylock; then systemctl suspend; fi"
+### When not in Lock Screen ###
+# after 10 minutes, lock
+timeout 1800 "swaylock -f" # config file used by swaylock
+# after 11 minutes, turn off screen
+timeout 660 "hyprctl dispatch dpms off" resume "hyprctl dispatch dpms on" 
+# after 20 minutes, suspend/sleep
+timeout 1200 "systemctl suspend"
+after-resume "hyprctl dispatch dpms on" # Turn on screen after resume from suspend
+before-sleep "swaylock -f"  # this may cause error in output because we already swaylock for auto idle sleep
+

@@ -34,6 +34,9 @@ in {
     ".config/swaylock" = {
       source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/swaylock";
     };
+    ".config/swayidle" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/swayidle";
+    };
     ".config/starship.toml" = {
       source = ../Configs/starship.toml;
       recursive = true;
