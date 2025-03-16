@@ -76,6 +76,6 @@
     # Most nvidia compositors need this
     nvidia.modesetting.enable = true;
     # Open source nvidia drivers
-    nvidia.open = true;
+    nvidia.open = false;
   };
 }
