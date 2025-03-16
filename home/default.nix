@@ -112,6 +112,8 @@ in {
 
       gparted # gui disk partitioning
 
+      ffmpeg # video/audio converter
+
       # fun stuff
       fastfetch
       neofetch
