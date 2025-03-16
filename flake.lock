@@ -245,22 +245,6 @@
         "type": "github"
       }
     },
-    "nixpkgs_4": {
-      "locked": {
-        "lastModified": 1738142207,
-        "narHash": "sha256-NGqpVVxNAHwIicXpgaVqJEJWeyqzoQJ9oc8lnK9+WC4=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "9d3ae807ebd2981d593cddd0080856873139aa40",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "plasma-manager": {
       "inputs": {
         "home-manager": [
@@ -317,8 +301,7 @@
         "hyprpanel": "hyprpanel",
         "lanzaboote": "lanzaboote",
         "nixpkgs": "nixpkgs_3",
-        "plasma-manager": "plasma-manager",
-        "walker": "walker"
+        "plasma-manager": "plasma-manager"
       }
     },
     "rust-overlay": {
@@ -339,40 +322,6 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "type": "github"
-      }
-    },
-    "systems": {
-      "locked": {
-        "lastModified": 1689347949,
-        "narHash": "sha256-12tWmuL2zgBgZkdoB6qXZsgJEH9LR3oUgpaQq2RbI80=",
-        "owner": "nix-systems",
-        "repo": "default-linux",
-        "rev": "31732fcf5e8fea42e59c2488ad31a0e651500f68",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default-linux",
-        "type": "github"
-      }
-    },
-    "walker": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_4",
-        "systems": "systems"
-      },
-      "locked": {
-        "lastModified": 1740745001,
-        "narHash": "sha256-XZEIwnwOYgb1wECvT83HB314bd/JBYwSaTaj2EeqWrc=",
-        "owner": "abenz1267",
-        "repo": "walker",
-        "rev": "350d5e078b997b5ca07eda39e207048ee26bbb9d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "abenz1267",
-        "repo": "walker",
         "type": "github"
       }
     }
