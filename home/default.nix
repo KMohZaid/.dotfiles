@@ -93,6 +93,7 @@ in {
       jq # json parsing/querying
       pokemon-colorscripts-mac # pokemon color scripts
       neovim
+      tmux
       luarocks
       pnpm
       cargo
