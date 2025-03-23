@@ -219,4 +219,7 @@
 
   # Wireshark
   programs.wireshark.enable = true;
+
+  # Waydroid
+  virtualisation.waydroid.enable = true;
 }
