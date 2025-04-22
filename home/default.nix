@@ -150,6 +150,7 @@ in {
       lolcat
       cowsay
       hollywood
+      cmatrix
 
       # Plasma stuff
       sweet-nova
