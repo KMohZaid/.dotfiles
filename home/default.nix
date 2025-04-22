@@ -129,6 +129,7 @@ in {
       unzip
       go
       gcc
+      gnumake # make command
       ripgrep
       tree
 
