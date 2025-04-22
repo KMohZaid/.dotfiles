@@ -86,6 +86,8 @@ in {
       floorp # browser (firefox fork)
       firefox # firefox browser, better keep more browser, useful maybe(i know about:profiles, but different browser as whole)
       librewolf
+      brave # chromium based browser, sometimes chromium based task needed
+      chromium # vanilla chromium browser if ever needed
       flatpak # flatpak...
       telegram-desktop
       qbittorrent # torrent client, best one for me. good for having ios file downloaded with resume
