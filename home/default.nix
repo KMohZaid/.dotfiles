@@ -19,8 +19,7 @@ in {
 
   home.file = {
     ".config/kitty" = {
-      source = ../Configs/kitty;
-      recursive = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/kitty";
     };
     ".config/nvim" = {
       source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/nvim";
