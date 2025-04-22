@@ -86,6 +86,7 @@ in {
       floorp # browser (firefox fork)
       firefox # firefox browser, better keep more browser, useful maybe(i know about:profiles, but different browser as whole)
       librewolf
+      flatpak # flatpak...
       telegram-desktop
       qbittorrent # torrent client, best one for me. good for having ios file downloaded with resume
       motrix # download manager(aria2c) and torrent client, best at download. good torrent client but more like downloader only
@@ -99,6 +100,8 @@ in {
       gimp # image editor
 
       zip # archiver
+      wget # downloading
+      curl # downloading
       file # file info
       btop # system monitor
       sqlitebrowser # sqlite database browser
