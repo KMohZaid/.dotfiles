@@ -97,6 +97,7 @@ in {
       rclone # cloud sync
       lsof # list files opened by process
       android-tools 
+      android-udev-rules # android udev rules
 
       gimp # image editor
 
