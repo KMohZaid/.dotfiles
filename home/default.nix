@@ -130,6 +130,7 @@ in {
       go
       gcc
       gnumake # make command
+      libcs50 # cs50 library for c
       ripgrep
       tree
 
