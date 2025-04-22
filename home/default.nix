@@ -119,7 +119,7 @@ in {
       lua
       tmux
       pnpm
-      cargo
+      rustup
       nodejs
       deno
       python3
