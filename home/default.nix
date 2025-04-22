@@ -115,8 +115,9 @@ in {
       jq # json parsing/querying
       pokemon-colorscripts-mac # pokemon color scripts
       neovim
+      luajitPackages.luarocks # luarocks for nix, lua package manager needed for some neovim packages
+      lua
       tmux
-      luarocks
       pnpm
       cargo
       nodejs
