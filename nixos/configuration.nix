@@ -225,4 +225,7 @@
 
   # Flatpak
   services.flatpak.enable = true;
+
+  # Mullvad service
+  services.mullvad-vpn.enable = true;
 }
