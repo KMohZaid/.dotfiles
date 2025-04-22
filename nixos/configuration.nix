@@ -86,7 +86,7 @@
   users.users.waifu = {
     isNormalUser = true;
     description = "Waifu";
-    extraGroups = [ "networkmanager" "wheel" "docker" "wireshark" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "wireshark" "adbusers" ];
     packages = with pkgs;
       [
         kdePackages.kate
@@ -125,9 +125,7 @@
 
     dmg2img # for osx-kvm
 
-    # Android
-    android-tools 
-    android-udev-rules # android udev rules
+    android-tools  # provide fastboot and adb
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -232,4 +230,9 @@
 
   # Mullvad service
   services.mullvad-vpn.enable = true;
+
+  # Android
+  programs.adb.enable = true;
+
+  services.udev.packages = [ pkgs.android-udev-rules ];
 }
