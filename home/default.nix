@@ -76,6 +76,7 @@ in {
 
       libreoffice # office
       obsidian # cool note taking app, closed source...
+      code-cursor # cursor editor 
       # logseq # obsidian alternative, also open source but bullet point notes :(. they are good but i take paragraph notes more
 
       suwayomi-server # tachiyomi server for manga on pc...
