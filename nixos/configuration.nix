@@ -124,6 +124,10 @@
     virt-manager # ui for kvm/qemu
 
     dmg2img # for osx-kvm
+
+    # Android
+    android-tools 
+    android-udev-rules # android udev rules
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
