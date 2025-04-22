@@ -80,6 +80,7 @@ in {
       # logseq # obsidian alternative, also open source but bullet point notes :(. they are good but i take paragraph notes more
 
       suwayomi-server # tachiyomi server for manga on pc...
+      stremio
 
       vesktop # discord
       floorp # browser (firefox fork)
