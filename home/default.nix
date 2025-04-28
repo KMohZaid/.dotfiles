@@ -110,6 +110,7 @@ in {
 
       ncdu # better than du, there was another cli tool which had statistic and also use ncdu in background. forgot name
       mpv # video player
+      ranger # file manager with image preview
 
       # other packages
       ntfs3g # ntfs drive mounting
