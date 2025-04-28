@@ -133,6 +133,7 @@ in {
       unzip
       go
       gcc
+      valgrind # for memory debugging (find out of bound index for pointer and leaking memory)
       gnumake # make command
       libcs50 # cs50 library for c
       ripgrep
