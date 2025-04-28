@@ -109,6 +109,7 @@
     kdePackages.kwalletmanager
     kdePackages.kwallet-pam
     kdePackages.ksshaskpass
+
     vim
     neovim
     git
@@ -191,6 +192,7 @@
     flake =
       "/home/waifu/.dotfiles"; # location of flake # TODO: make it dynamically take somehow when run nixos switch, so we can have changable path
   };
+  environment.variables.NH_FLAKE = "/home/waifu/.dotfiles";
 
   # Enable bluetooth
   hardware.bluetooth.enable = true;
@@ -240,6 +242,7 @@
   programs.adb.enable = true;
 
   services.udev.packages = [ pkgs.android-udev-rules ];
+
   # KWallet
   # pam setup
   security.pam.services = {
