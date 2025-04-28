@@ -3,6 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [ # Include the results of the hardware scan.
@@ -104,6 +105,10 @@
   environment.systemPackages = with pkgs; [
     ntfs3g # NTFS-3G
 
+    kdePackages.kwallet
+    kdePackages.kwalletmanager
+    kdePackages.kwallet-pam
+    kdePackages.ksshaskpass
     vim
     neovim
     git
@@ -235,4 +240,29 @@
   programs.adb.enable = true;
 
   services.udev.packages = [ pkgs.android-udev-rules ];
+  # KWallet
+  # pam setup
+  security.pam.services = {
+    login.kwallet = { 
+     enable = true; 
+     package = lib.mkForce pkgs.kdePackages.kwallet-pam;
+   };
+  };
+  # ssh agent with kwallet
+  programs.ssh.startAgent = true;
+  environment.variables = {
+    SSH_ASKPASS = lib.mkForce (pkgs.writeScript "ksshaskpass-silent" ''
+      #!${pkgs.stdenv.shell}
+      # silent the errors
+      exec ${pkgs.kdePackages.ksshaskpass}/bin/ksshaskpass "$@" 2> /dev/null
+    '');
+    SSH_ASKPASS_REQUIRE = "prefer"; # if no terminal is available, `force` if want always ask
+    # for git pass like https one, ssh friend so together
+    GIT_ASKPASS = lib.mkForce (pkgs.writeScript "git-askpass-silent" ''
+      #!${pkgs.stdenv.shell}
+      # silent the errors
+      exec ${pkgs.gitAndTools.git}/bin/git-askpass "$@" 2> /dev/null
+    '');
+  };
+
 }
