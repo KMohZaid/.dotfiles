@@ -107,7 +107,8 @@ in {
       file # file info
       btop # system monitor
       sqlitebrowser # sqlite database browser
-      sqlite # sqlite3 cli
+      sqlite-interactive # interactive sqlite shell, with autocomplete and history
+      zoom-us # zoom client
 
       ncdu # better than du, there was another cli tool which had statistic and also use ncdu in background. forgot name
       mpv # video player
@@ -130,6 +131,7 @@ in {
       deno
       python3
       python3Packages.pip
+      python312Packages.flask
       sshpass
       unzip
       go
