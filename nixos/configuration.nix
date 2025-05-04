@@ -250,21 +250,8 @@
      package = lib.mkForce pkgs.kdePackages.kwallet-pam;
    };
   };
-  # ssh agent with kwallet
+
+  # ssh agent
   programs.ssh.startAgent = true;
-  environment.variables = {
-    SSH_ASKPASS = lib.mkForce (pkgs.writeScript "ksshaskpass-silent" ''
-      #!${pkgs.stdenv.shell}
-      # silent the errors
-      exec ${pkgs.kdePackages.ksshaskpass}/bin/ksshaskpass "$@" 2> /dev/null
-    '');
-    SSH_ASKPASS_REQUIRE = "prefer"; # if no terminal is available, `force` if want always ask
-    # for git pass like https one, ssh friend so together
-    GIT_ASKPASS = lib.mkForce (pkgs.writeScript "git-askpass-silent" ''
-      #!${pkgs.stdenv.shell}
-      # silent the errors
-      exec ${pkgs.gitAndTools.git}/bin/git-askpass "$@" 2> /dev/null
-    '');
-  };
 
 }
