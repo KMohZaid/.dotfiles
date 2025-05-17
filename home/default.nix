@@ -99,6 +99,7 @@ in {
       rclone # cloud sync
       lsof # list files opened by process
 
+      trashy # i hate losing file from accidental delete
       gimp # image editor
 
       zip # archiver
@@ -145,6 +146,7 @@ in {
       wl-clipboard-rs # clipboard manager for wayland, this onee is rust implementation of wl-clipboard and upto date...
       xclip # x11 clipboard manager
 
+      inotify-tools # inotify tools to watch file changes
       gparted # gui disk partitioning
 
       ffmpeg # video/audio converter

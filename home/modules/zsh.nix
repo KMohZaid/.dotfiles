@@ -13,6 +13,7 @@
       lt = "eza --icons=auto --tree";
       vim = "nvim";
       tmux = "tmux -u"; # start tmux with the unicode support (sometimes it doesn't start with unicode support)
+      rm = "trash put"; # use trash instead of rm
     };
 
     # Zplug configuration
