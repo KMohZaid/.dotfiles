@@ -109,6 +109,8 @@
     kdePackages.kwallet-pam
     kdePackages.ksshaskpass
 
+    kdePackages.qt6ct
+
     vim
     neovim
     git
@@ -119,6 +121,7 @@
     fish
 
     mullvad-vpn
+    expressvpn
 
     sbctl
 
@@ -254,4 +257,6 @@
   # ssh agent
   programs.ssh.startAgent = true;
 
+  # OpenVPN
+  programs.openvpn3.enable = true;
 }
