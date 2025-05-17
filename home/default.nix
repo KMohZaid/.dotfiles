@@ -44,6 +44,11 @@ in {
       source = ../Configs/fastfetch;
       recursive = true;
     };
+
+    # Fix Dolphin MIME type list, applications.menu file missing issue (it is saved at /etc/xdg/menus/applications.menu but kde QList error tells that it is not looking there)
+    ".config/menus/applications.menu" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
+    };
   };
 
   programs.vscode = { enable = true; };
@@ -70,7 +75,22 @@ in {
     stateVersion = "24.11";
     username = "waifu";
     homeDirectory = "/home/waifu";
+    sessionVariables = {
+      # Trick KDE apps into thinking you're in KDE
+      QT_QPA_PLATFORMTHEME = "kde"; # Or "qt6ct" if you use it
+      QT_PLUGIN_PATH = "${pkgs.kdePackages.plasma-workspace}/lib/qt-6/plugins:${pkgs.qt6.qtbase}/lib/qt-6/plugins";
+      QML_IMPORT_PATH = "${pkgs.kdePackages.plasma-workspace}/lib/qt-6/qml:${pkgs.qt6.qtdeclarative}/lib/qt-6/qml";
+      XDG_DATA_DIRS = "${pkgs.kdePackages.plasma-workspace}/share:${pkgs.qt6.qtbase}/share:$XDG_DATA_DIRS";
+    };
+
     packages = with pkgs; [
+      # kde stuff needed for kde setting app and some utility, qml modules...
+      kdePackages.systemsettings
+      kdePackages.kirigami
+      kdePackages.knewstuff
+      qt6.qtpositioning
+      qt6.qtdeclarative
+
       kitty # terminal
       git # essential
 
@@ -100,6 +120,7 @@ in {
       lsof # list files opened by process
 
       trashy # i hate losing file from accidental delete
+
       gimp # image editor
 
       zip # archiver
@@ -147,6 +168,7 @@ in {
       xclip # x11 clipboard manager
 
       inotify-tools # inotify tools to watch file changes
+
       gparted # gui disk partitioning
 
       ffmpeg # video/audio converter
