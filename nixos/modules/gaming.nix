@@ -33,9 +33,7 @@
   ];
 
   # OBS virtual camera
-  boot.extraModulePackages = with config.boot.kernelPackages; [
-    v4l2loopback
-  ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.extraModprobeConfig = ''
     options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
   '';
@@ -57,7 +55,7 @@
     # integrated
     intelBusId = "PCI:0:2:0";
     # amdgpuBusId = "PCI:6:0:0"
-    
+
     # dedicated
     nvidiaBusId = "PCI:1:0:0";
   };

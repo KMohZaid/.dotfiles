@@ -45,7 +45,7 @@
 
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = false; 
+  services.xserver.enable = false;
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable =
@@ -133,7 +133,7 @@
 
     dmg2img # for osx-kvm
 
-    android-tools  # provide fastboot and adb
+    android-tools # provide fastboot and adb
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -248,10 +248,10 @@
   # KWallet
   # pam setup
   security.pam.services = {
-    login.kwallet = { 
-     enable = true; 
-     package = lib.mkForce pkgs.kdePackages.kwallet-pam;
-   };
+    login.kwallet = {
+      enable = true;
+      package = lib.mkForce pkgs.kdePackages.kwallet-pam;
+    };
   };
 
   # ssh agent

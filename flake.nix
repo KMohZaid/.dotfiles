@@ -69,9 +69,11 @@
           inherit pkgs;
           modules = [
             ({ config, pkgs, ... }: {
-              nixpkgs.config.allowUnfree = true;  # Enable unfree packages in Home Manager
+              nixpkgs.config.allowUnfree =
+                true; # Enable unfree packages in Home Manager
             })
-            ./home/default.nix ];
+            ./home/default.nix
+          ];
           # INFO: Plasma-manager
           #       Pass the plasma-manager module to the home-manager configuration
           #   

@@ -19,7 +19,8 @@ in {
 
   home.file = {
     ".config/kitty" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/kitty";
+      source =
+        config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/kitty";
     };
     ".config/nvim" = {
       source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/nvim";
@@ -28,13 +29,16 @@ in {
       source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/hypr";
     };
     ".config/wlogout" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/wlogout";
+      source =
+        config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/wlogout";
     };
     ".config/swaylock" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/swaylock";
+      source =
+        config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/swaylock";
     };
     ".config/swayidle" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/swayidle";
+      source =
+        config.lib.file.mkOutOfStoreSymlink "${sourceConfigFolder}/swayidle";
     };
     ".config/starship.toml" = {
       source = ../Configs/starship.toml;
@@ -47,17 +51,16 @@ in {
 
     # Fix Dolphin MIME type list, applications.menu file missing issue (it is saved at /etc/xdg/menus/applications.menu but kde QList error tells that it is not looking there)
     ".config/menus/applications.menu" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
+      source = config.lib.file.mkOutOfStoreSymlink
+        "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
     };
   };
 
   programs.vscode = { enable = true; };
   programs.kodi = {
     enable = true;
-    package = pkgs.kodi-wayland.passthru.withPackages (kodiPkgs: with kodiPkgs; [
-      netflix
-      jellycon
-    ]);
+    package = pkgs.kodi-wayland.passthru.withPackages
+      (kodiPkgs: with kodiPkgs; [ netflix jellycon ]);
     # addonSettings = {};
     settings = {
       services = {
@@ -78,9 +81,12 @@ in {
     sessionVariables = {
       # Trick KDE apps into thinking you're in KDE
       QT_QPA_PLATFORMTHEME = "kde"; # Or "qt6ct" if you use it
-      QT_PLUGIN_PATH = "${pkgs.kdePackages.plasma-workspace}/lib/qt-6/plugins:${pkgs.qt6.qtbase}/lib/qt-6/plugins";
-      QML_IMPORT_PATH = "${pkgs.kdePackages.plasma-workspace}/lib/qt-6/qml:${pkgs.qt6.qtdeclarative}/lib/qt-6/qml";
-      XDG_DATA_DIRS = "${pkgs.kdePackages.plasma-workspace}/share:${pkgs.qt6.qtbase}/share:$XDG_DATA_DIRS";
+      QT_PLUGIN_PATH =
+        "${pkgs.kdePackages.plasma-workspace}/lib/qt-6/plugins:${pkgs.qt6.qtbase}/lib/qt-6/plugins";
+      QML_IMPORT_PATH =
+        "${pkgs.kdePackages.plasma-workspace}/lib/qt-6/qml:${pkgs.qt6.qtdeclarative}/lib/qt-6/qml";
+      XDG_DATA_DIRS =
+        "${pkgs.kdePackages.plasma-workspace}/share:${pkgs.qt6.qtbase}/share:$XDG_DATA_DIRS";
     };
 
     packages = with pkgs; [
@@ -96,7 +102,7 @@ in {
 
       libreoffice # office
       obsidian # cool note taking app, closed source...
-      code-cursor # cursor editor 
+      code-cursor # cursor editor
       # logseq # obsidian alternative, also open source but bullet point notes :(. they are good but i take paragraph notes more
 
       suwayomi-server # tachiyomi server for manga on pc...

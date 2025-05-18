@@ -52,13 +52,13 @@
     (pkgs.writeScriptBin "polkit-authentication-agent-1" ''
       #!/usr/bin/env bash
       ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 $@
-      '')
+    '')
 
     # dolphin fixes
     # thumbnails icon
     # cc : https://www.reddit.com/r/hyprland/comments/18ecoo3/comment/m6uhvdv/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
     kdePackages.dolphin # Actual fix : thanks to https://www.reddit.com/r/NixOS/comments/1goziru/comment/lzpgcdx/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
-      # i think specifing dolphin from kdePackages is enough for theme and icon, it will install other depednencies but still keeping below for now # TODO: clean
+    # i think specifing dolphin from kdePackages is enough for theme and icon, it will install other depednencies but still keeping below for now # TODO: clean
     kdePackages.kio-extras # libsForQt5.kio-extras  # because i am using kde 6 and thats qhy qt5 lib not working?
     kdePackages.qtsvg
     libsForQt5.ffmpegthumbs
@@ -66,8 +66,6 @@
   ];
 
   services.upower.enable = true;
-
-
 
   hardware = {
     # Opengl
