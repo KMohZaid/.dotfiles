@@ -26,7 +26,16 @@
   home.packages = with pkgs; [
     # Editors
     code-cursor # cursor editor
+    jetbrains.idea-community-bin # jetbrains IDE
     neovim
+
+    # Java
+    jdk24
+    gradle
+    sdkmanager
+
+    # Kotlin
+    kotlin
 
     # JS
     pnpm
