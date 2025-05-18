@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   # Nvidia ...
   services.xserver.videoDrivers = [ "nvidia" ];
-  # Enable Steam 
+  # Enable Steam
   # steam package are unfree license, this will only allow them, instead of allowing all unfree package
-  nixpkgs.config.allowUnfreePredicate = pkg:
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
     builtins.elem (lib.getName pkg) [
       "steam"
       "steam-unwrapped"
@@ -91,4 +97,3 @@
     0.0.0.0 log-upload.mihoyo.com
   '';
 }
-

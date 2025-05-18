@@ -1,8 +1,14 @@
-{ config, pkgs, customConfig, ... }:
+{
+  config,
+  pkgs,
+  customConfig,
+  ...
+}:
 let
   symlink = config.lib.file.mkOutOfStoreSymlink;
   cfg = "${customConfig.NIX_FLAKE_DIR_ABSOLUTE_PATH}/Configs";
-in {
+in
+{
   home.file = {
     ".config/kitty".source = symlink "${cfg}/kitty";
     ".config/nvim".source = symlink "${cfg}/nvim";
@@ -20,7 +26,7 @@ in {
     };
 
     # Fix Dolphin MIME type list, applications.menu file missing issue (it is saved at /etc/xdg/menus/applications.menu but kde QList error tells that it is not looking there)
-    ".config/menus/applications.menu".source = symlink
-      "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
+    ".config/menus/applications.menu".source =
+      symlink "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
   };
 }

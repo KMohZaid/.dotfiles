@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   home.packages = with pkgs; [
     eza
     jq # json parsing/querying
@@ -12,7 +13,7 @@
     neovim
     starship
     git
-    gcc 
+    gcc
     gnumake # make command
     btop # system monitor
     zip # archiver

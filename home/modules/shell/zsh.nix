@@ -12,8 +12,7 @@
       ls = "eza -1 --icons -a --group-directories-first";
       lt = "eza --icons=auto --tree";
       vim = "nvim";
-      tmux =
-        "tmux -u"; # start tmux with the unicode support (sometimes it doesn't start with unicode support)
+      tmux = "tmux -u"; # start tmux with the unicode support (sometimes it doesn't start with unicode support)
       rm = "trash put"; # use trash instead of rm
     };
 
@@ -108,6 +107,11 @@
     '';
   };
 
-  home.packages = with pkgs; [ starship zsh eza pokemon-colorscripts-mac jq ];
+  home.packages = with pkgs; [
+    starship
+    zsh
+    eza
+    pokemon-colorscripts-mac
+    jq
+  ];
 }
-

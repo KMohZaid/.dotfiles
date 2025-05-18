@@ -1,10 +1,10 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   # ENV : Set default editor
   home.sessionVariables = {
-      VISUAL = "nvim";
-      EDITOR = "nvim";
+    VISUAL = "nvim";
+    EDITOR = "nvim";
   };
-
 
   # Git : Set git config
   programs.git = {
@@ -14,13 +14,14 @@
     extraConfig = {
       gpg.format = "ssh";
       user.signingKey = "~/.ssh/github_rsa.key";
-      commit.gpgsign =
-        true; # auto sign commits without -S, TODO: find workaround to make it add key to ssh-agent when used
+      commit.gpgsign = true; # auto sign commits without -S, TODO: find workaround to make it add key to ssh-agent when used
     };
   };
-  
+
   # Enable VSCode if ever needed
-  programs.vscode = { enable = true; };
+  programs.vscode = {
+    enable = true;
+  };
 
   home.packages = with pkgs; [
     # Editors

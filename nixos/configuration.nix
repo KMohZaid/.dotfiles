@@ -4,10 +4,16 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
-  imports = [ # Include the results of the hardware scan.
+  imports = [
+    # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./modules/gaming.nix
     ./modules/hyprland.nix
@@ -50,8 +56,7 @@
   services.xserver.enable = false;
 
   # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable =
-    true; # SDDM :::: idk why sddm-helper crashing suddenly
+  services.displayManager.sddm.enable = true; # SDDM :::: idk why sddm-helper crashing suddenly
   services.displayManager.sddm.wayland.enable = true;
   services.displayManager.ly.enable = false; # Ly
   services.desktopManager.plasma6.enable = true;
@@ -88,12 +93,17 @@
   users.users.waifu = {
     isNormalUser = true;
     description = "Waifu";
-    extraGroups = [ "networkmanager" "wheel" "docker" "wireshark" "adbusers" ];
-    packages = with pkgs;
-      [
-        kdePackages.kate
-        #  thunderbird
-      ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+      "wireshark"
+      "adbusers"
+    ];
+    packages = with pkgs; [
+      kdePackages.kate
+      #  thunderbird
+    ];
     shell = pkgs.fish;
   };
   programs.fish.enable = true;
@@ -165,11 +175,13 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.11"; # Did you read the comment?
 
-  nix.settings.experimental-features = [ "flakes" "nix-command" ];
+  nix.settings.experimental-features = [
+    "flakes"
+    "nix-command"
+  ];
 
-  # Run unpatched dynamic binaries on NixOS ::: https://nix.dev/guides/faq#how-to-run-non-nix-executables 
-  programs.nix-ld.enable =
-    true; # needed as some tool like nvim plugin have some binaries ~~# disabled for now, as not needed for now~~
+  # Run unpatched dynamic binaries on NixOS ::: https://nix.dev/guides/faq#how-to-run-non-nix-executables
+  programs.nix-ld.enable = true; # needed as some tool like nvim plugin have some binaries ~~# disabled for now, as not needed for now~~
 
   # Fonts
   fonts.packages = with pkgs; [
@@ -189,12 +201,12 @@
   # Enable nh (yanh, yet another nix helper)
   programs.nh = {
     enable = true;
-    clean = { # Run `nh clean` as service
+    clean = {
+      # Run `nh clean` as service
       enable = true;
       extraArgs = "--keep-since 7d --keep 5"; # keep last 7 days and 5 versions
     };
-    flake =
-      "/home/waifu/.dotfiles"; # location of flake # TODO: make it dynamically take somehow when run nixos switch, so we can have changable path
+    flake = "/home/waifu/.dotfiles"; # location of flake # TODO: make it dynamically take somehow when run nixos switch, so we can have changable path
   };
   environment.variables.NH_FLAKE = "/home/waifu/.dotfiles";
 
@@ -204,12 +216,13 @@
   # Setup cachix
   nix.settings = {
     substituters = [ "https://ezkea.cachix.org" ];
-    trusted-public-keys =
-      [ "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI=" ];
+    trusted-public-keys = [ "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI=" ];
   };
 
   # Enable Samba
-  services.samba = { enable = true; };
+  services.samba = {
+    enable = true;
+  };
 
   # Enable kvm for osx-kvm
   virtualisation.libvirtd.enable = true;

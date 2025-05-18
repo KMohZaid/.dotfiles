@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   # TODO: add other packages also
   home.packages = with pkgs; [
     mpv # video player
