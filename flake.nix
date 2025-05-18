@@ -1,3 +1,4 @@
+# TODO: clean this
 {
   description = "NixOS and Home Manager Flake";
 

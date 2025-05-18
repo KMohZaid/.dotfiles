@@ -1,4 +1,31 @@
 { plasma-manager, pkgs, ... }: {
+  # TODO: clean this up
+  # TODO: maybe move to folder called plasma with rc2nix.nix file
+  # TODO: in future, get rid of rc2nix.nix file
+
+  # kde stuff needed for kde setting app and some utility, qml modules...
+  home.packages = with pkgs; [
+    kdePackages.systemsettings
+    kdePackages.kirigami
+    kdePackages.knewstuff
+    qt6.qtpositioning
+    qt6.qtdeclarative
+
+    # other plasma stuff
+    sweet-nova
+    sweet-folders
+  ];
+  
+  # ENV : Trick KDE apps into thinking you're in KDE
+  home.sessionVariables = {
+      QT_QPA_PLATFORMTHEME = "kde";
+      QT_PLUGIN_PATH =
+        "${pkgs.kdePackages.plasma-workspace}/lib/qt-6/plugins:${pkgs.qt6.qtbase}/lib/qt-6/plugins";
+      QML_IMPORT_PATH =
+        "${pkgs.kdePackages.plasma-workspace}/lib/qt-6/qml:${pkgs.qt6.qtdeclarative}/lib/qt-6/qml";
+      XDG_DATA_DIRS =
+        "${pkgs.kdePackages.plasma-workspace}/share:${pkgs.qt6.qtbase}/share:$XDG_DATA_DIRS";
+    };
 
   imports =
     [ plasma-manager.homeManagerModules.plasma-manager ./plasma.rc2nix.nix ];

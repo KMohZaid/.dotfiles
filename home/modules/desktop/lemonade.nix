@@ -13,5 +13,6 @@
   };
 
   # Ensure lemonade is installed
+  # TODO: remove this installation from common package list
   home.packages = [ pkgs.lemonade ];
 }
