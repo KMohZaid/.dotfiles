@@ -33,6 +33,8 @@
     # Install Game Launchers
     lutris
     prismlauncher
+    heroic
+    bottles
 
     # MISC
     obs-studio # Enable OBS Studio for recording/streaming games
