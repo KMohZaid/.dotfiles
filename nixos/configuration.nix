@@ -17,6 +17,7 @@
     ./hardware-configuration.nix
     ./modules/gaming.nix
     ./modules/hyprland.nix
+    ./modules/niri.nix
   ];
 
   # Bootloader.
