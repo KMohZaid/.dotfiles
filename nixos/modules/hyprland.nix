@@ -19,6 +19,8 @@
     walker
     brightnessctl
 
+    ideogram
+
     hyprpanel
     # required by hyprpanel and needed without it
     ags # nix package name for aur "aylurs-gtk-shell-git"
@@ -49,6 +51,16 @@
     xfce.thunar
     libnotify
     (flameshot.override { enableWlrSupport = true; })
+    grim # screenshot tool
+    slurp # area selector
+    swappy # screenshot editor
+    wf-recorder # screen recorder # TODO: setup hyprland keybinds for quick recording. Can also setup regional recording using slurp
+    # TODO: hyprctl monitors activeWorkspace is current workspace but not special one, we need to check special workspace key for it "specialWorkspace". so special workspace area selection fails
+    # TODO: make this more readable instead of one liner
+    (pkgs.writeScriptBin "slurp_hyprland_window_selector" ''
+      #!/usr/bin/env bash
+      hyprctl clients -j | jq --argjson active $(hyprctl monitors -j | jq -c '[.[].activeWorkspace.id]') '.[] | select((.hidden | not) and .workspace.id as $id | $active | contains([$id])) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' -r | slurp
+    '')
     # Gnome PolKit Agent for Hyprland
     (pkgs.writeScriptBin "polkit-authentication-agent-1" ''
       #!/usr/bin/env bash
