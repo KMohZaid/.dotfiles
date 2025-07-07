@@ -24,5 +24,6 @@
     tor # tor ... for educational purpose and onion technique experiments
     tor-browser # tor... for educational purpose and onion technique experiments
     mullvad-vpn # vpn
+    youtube-music
   ];
 }

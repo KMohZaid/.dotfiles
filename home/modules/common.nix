@@ -35,6 +35,8 @@
     inotify-tools # inotify tools to watch file changes
     gparted # gui disk partitioning
     ffmpeg # video/audio converter
+    udiskie # udisks2 wrapper
+    udisks2
 
     # fun stuff
     fastfetch

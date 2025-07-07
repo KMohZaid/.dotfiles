@@ -41,6 +41,8 @@
     pnpm
     deno
     nodejs
+    
+    vscode-langservers-extracted
 
     # Python
     python3
