@@ -8,7 +8,6 @@
     plasma-manager.url = "github:nix-community/plasma-manager";
     plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
     plasma-manager.inputs.home-manager.follows = "home-manager";
-    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
 
     # Secureboot
     lanzaboote = {
@@ -31,7 +30,6 @@
       system = "x86_64-linux"; # Change as necessary
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ inputs.hyprpanel.overlay ];
       };
     in
     {
@@ -44,7 +42,6 @@
             (
               { config, pkgs, ... }:
               {
-                nixpkgs.overlays = [ inputs.hyprpanel.overlay ];
                 nixpkgs.config.allowUnfree = true;
               }
             )
