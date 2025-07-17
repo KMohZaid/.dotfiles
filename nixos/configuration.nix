@@ -272,6 +272,7 @@
 
   # ssh agent
   programs.ssh.startAgent = true;
+  services.gnome.gcr-ssh-agent.enable = false;
 
   # OpenVPN
   programs.openvpn3.enable = true;
