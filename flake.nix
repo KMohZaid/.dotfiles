@@ -3,7 +3,7 @@
   description = "NixOS and Home Manager Flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable"; # nixos-unstable have slow update, nixpkgs-unstable is more up-to-date (cc: https://discourse.nixos.org/t/differences-between-nix-channels/13998/5)
     home-manager.url = "github:nix-community/home-manager";
     plasma-manager.url = "github:nix-community/plasma-manager";
     plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
