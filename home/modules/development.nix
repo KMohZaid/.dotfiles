@@ -26,7 +26,7 @@
   home.packages = with pkgs; [
     # Editors
     code-cursor # cursor editor
-    jetbrains.idea-community-bin # jetbrains IDE
+    # jetbrains.idea-community-bin # jetbrains IDE # not needed right now, neovim is enough (fr)
     neovim
 
     # Java
