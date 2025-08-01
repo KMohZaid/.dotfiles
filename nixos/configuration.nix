@@ -20,6 +20,9 @@
     ./modules/niri.nix
   ];
 
+  # Clean tmp on boot
+  boot.tmp.cleanOnBoot = true;
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
