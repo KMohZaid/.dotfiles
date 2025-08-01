@@ -219,7 +219,11 @@
 
   # Setup cachix
   nix.settings = {
-    substituters = [ "https://ezkea.cachix.org" ];
+    substituters = [
+      "https://ezkea.cachix.org" # aagl(genshin,honkai), etc.
+      "https://cuda-maintainers.cachix.org" # CUDA, i hope it have nvidia cache
+    ];
+    # Optional : trusting keys, i guess ignored in impure run
     trusted-public-keys = [ "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI=" ];
   };
 
