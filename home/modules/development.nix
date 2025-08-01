@@ -29,6 +29,9 @@
     # jetbrains.idea-community-bin # jetbrains IDE # not needed right now, neovim is enough (fr)
     neovim
 
+    # ai
+    gemini-cli # gemini cli
+
     # Java
     jdk24
     gradle
