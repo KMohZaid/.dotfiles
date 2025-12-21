@@ -201,6 +201,14 @@
 		"actionPrefix": ">",
 		"actions": [
 			{
+				"name": "Walker Provider List",
+				"icon": "W",
+				"description": "List available walker providers",
+				"command": ["walker", "-m", "providerlist"],
+				"enabled": true,
+				"dangerous": false
+			},
+			{
 				"name": "Calculator",
 				"icon": "calculate",
 				"description": "Do simple math equations (powered by Qalc)",
