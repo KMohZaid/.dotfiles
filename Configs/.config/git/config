@@ -17,7 +17,7 @@
 	mnemonicPrefix = true    # More intuitive refs in diff output
 [commit]
 	verbose = true           # Include diff comment in commit message template
-	gpgsign = true
+	gpgsign = false
 [column]
 	ui = auto 			     # Output in columns when possible
 [branch]

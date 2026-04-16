@@ -1,0 +1,11 @@
+[Unit]
+Description=Backup Zen sessionstore on login
+After=default.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/systemd/user/zen-session-backup.sh
+
+[Install]
+WantedBy=default.target
+

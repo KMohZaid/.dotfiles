@@ -32,8 +32,15 @@ alias ll='eza -lha --icons=auto --sort=name --group-directories-first'
 alias ls='eza -1 --icons -a --group-directories-first'
 alias lt='eza --icons=auto --tree'
 alias vim='nvim'
-alias tmux='tmux -u'  # start tmux with unicode support
-alias rm='trashy put'  # use trash instead of rm
+alias tmux='tmux -u' # start tmux with unicode support
+# use trash instead of rm
+# trashy if found else trash, if neither found, use rm
+# moved from trash to trashy because i liked trashy
+if type -q trashy
+    alias rm='trashy put'
+else if type -q trash
+    alias rm='trash'
+end
 
 # ============================================================================
 # Functions
@@ -58,16 +65,16 @@ function display_pokemon_fastfetch
 
     if set -q _flag_n
         set poke_name $_flag_n
-        pokemon-colorscripts -n $poke_name > /tmp/poke.txt
+        pokemon-colorscripts -n $poke_name >/tmp/poke.txt
     else
-        pokemon-colorscripts -r > /tmp/poke.txt
+        pokemon-colorscripts -r >/tmp/poke.txt
     end
 
     set poke_name (head -n 1 /tmp/poke.txt)
     set poke_name (string sub -l 1 $poke_name | string upper)$(string sub -s 2 $poke_name)
 
-    jq --arg new_heading "$fastfetch_color_code   $poke_name" '.modules[0].format = $new_heading' ~/.config/fastfetch/config.jsonc > /tmp/fastfetch.tmp.json
-    sed -i '1d' /tmp/poke.txt
+    jq --arg new_heading "$fastfetch_color_code   $poke_name" '.modules[0].format = $new_heading' ~/.config/fastfetch/config.jsonc >/tmp/fastfetch.tmp.json
+    sed -i 1d /tmp/poke.txt
     fastfetch -l /tmp/poke.txt -c /tmp/fastfetch.tmp.json
 end
 
@@ -76,12 +83,30 @@ end
 # ============================================================================
 
 # Run Pokemon display on startup
-display_pokemon_fastfetch
+#status is-interactive; and display_pokemon_fastfetch
 
 # Initialize starship prompt
 starship init fish | source
 
 # ============================================================================
+# Use Python Venv properly, also auto load user home venv
+# ============================================================================
+
+# Only activate if no other virtualenv is active
+if not set -q VIRTUAL_ENV
+    if test -d "$HOME/.venv"
+        source $HOME/.venv/bin/activate.fish
+    end
+end
+
+# ============================================================================
 # Fish Plugin Manager (fisher)
 # ============================================================================
 # To install fisher and plugins, run: ~/.dotfiles/setup-fish-plugins.sh
+
+# pnpm
+set -gx PNPM_HOME "/home/waifu/.local/share/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+    set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end

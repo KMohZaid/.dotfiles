@@ -17,5 +17,3 @@ source = ~/.config/hypr/windows.conf
 env = NVD_BACKEND,direct
 env = LIBVA_DRIVER_NAME,nvidia
 env = __GLX_VENDOR_LIBRARY_NAME,nvidia
-
-source = ./dms/cursor.conf
