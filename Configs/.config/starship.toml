@@ -8,10 +8,17 @@ $git_status\
 $cmd_duration\
 $line_break\
 $python\
+${custom.py_venv}\
+$status\
 $character"""
 
 [directory]
 style = "blue"
+
+[status]
+disabled = true
+symbol = "✖ "
+format = "[$symbol$status]($style) "
 
 [character]
 success_symbol = "[❯](purple)"
@@ -42,5 +49,13 @@ format = "[$duration]($style) "
 style = "yellow"
 
 [python]
-format = "[$virtualenv]($style) "
+format = "[\\($version\\) $virtualenv]($style) "
 style = "bright-black"
+disabled = true
+
+[custom.py_venv]
+command = 'if [ "$VIRTUAL_ENV" = "$HOME/.venv" ]; then echo ""; else basename "$VIRTUAL_ENV"; fi'
+when = '[ -n "$VIRTUAL_ENV" ]'
+format = " [$output]($style) "
+style = "bright-black"
+shell = ["bash", "--noprofile", "--norc"]
