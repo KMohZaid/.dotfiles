@@ -1,0 +1,266 @@
+[
+  {
+    "context": "Editor && vim_mode == normal && !menu",
+    "bindings": {
+      // --- File + buffer navigation (ported from LazyVim <leader>f/* and related maps) ---
+      // <leader><leader> — Find files in project root.
+      "space space": "file_finder::Toggle",
+      // <leader>ff — Find files (root dir).
+      "space f f": "file_finder::Toggle",
+      // <leader>fF — Find files from cwd in Neovim; closest in Zed is global file finder.
+      "space f shift-f": "file_finder::Toggle",
+      // <leader>fg — Git files in Neovim; Zed has no exact git-files picker.
+      // TODO: add keymap later by user (plugin/command palette flow)
+      // XXX: may not work exactly like LazyVim.
+      "space f g": null,
+      // <leader>fr — Recent files (closest built-in: tab switcher recent items).
+      "space f r": "tab_switcher::Toggle",
+      // <leader>fR — Recent files (cwd in Neovim); closest built-in behavior.
+      "space f shift-r": "tab_switcher::Toggle",
+      // <leader>fb / <leader>, — Buffer picker.
+      "space f b": "tab_switcher::Toggle",
+      ",": "tab_switcher::Toggle",
+      // <leader>fB — All buffers in Neovim; use tab switcher in Zed.
+      "space f shift-b": "tab_switcher::Toggle",
+      // <leader>fc — Find config file.
+      // TODO: add keymap later by user (workspace specific command)
+      "space f c": null,
+      // <leader>fn — New file.
+      "space f n": "workspace::NewFile",
+      // <leader>fk — Open keymaps list/export in Neovim; open Zed keymap file.
+      "space f k": "zed::OpenKeymapFile",
+      // <leader>fp — Projects picker in LazyVim (closest built-in fallback).
+      "space f p": "file_finder::Toggle",
+
+      // --- Search / picker group (ported from LazyVim <leader>s/*) ---
+      // <leader>sg — Grep root dir.
+      "space s g": "pane::DeploySearch",
+      // <leader>sG — Grep cwd in Neovim; closest in Zed is pane search.
+      "space s shift-g": "pane::DeploySearch",
+      // <leader>sw — Search current word/selection (root).
+      "space s w": "pane::DeploySearch",
+      // <leader>sW — Search current word/selection (cwd).
+      "space s shift-w": "pane::DeploySearch",
+      // <leader>sb / <leader>sB — Buffer lines / grep open buffers.
+      "space s b": "buffer_search::Deploy",
+      "space s shift-b": "buffer_search::Deploy",
+      // <leader>s/ — Search history in Neovim.
+      // TODO: add keymap later by user
+      "space s /": null,
+      // <leader>sr — Search and replace.
+      "space s r": ["pane::DeploySearch", { "replace_enabled": true }],
+      // <leader>sc / <leader>sC — Command history / commands.
+      "space s c": "command_palette::Toggle",
+      "space s shift-c": "command_palette::Toggle",
+      // <leader>sk — Keymaps picker.
+      "space s k": "zed::OpenKeymap",
+      // <leader>sh — Help pages.
+      "space s h": "command_palette::Toggle",
+      // <leader>sj — Jumps list (Neovim specific).
+      // TODO: add keymap later by user
+      // XXX: may not work
+      "space s j": null,
+      // <leader>sm — Marks picker (Neovim specific).
+      "space s m": null,
+      // <leader>sq / <leader>sl — quickfix/location list in Neovim.
+      "space s q": "diagnostics::Deploy",
+      "space s l": "diagnostics::Deploy",
+      // <leader>sR — Resume last picker in Neovim.
+      // TODO: add keymap later by user
+      "space s shift-r": null,
+      // <leader>sd / <leader>sD — diagnostics search.
+      "space s d": "diagnostics::Deploy",
+      "space s shift-d": "diagnostics::Deploy",
+
+      // --- Git group (ported from LazyVim <leader>g/*) ---
+      // <leader>gs — Git status.
+      "space g s": "git_panel::ToggleFocus",
+      // <leader>gS — Git stash list in Neovim.
+      // TODO: add keymap later by user
+      "space g shift-s": null,
+      // <leader>gb — Git blame line.
+      // TODO: add keymap later by user
+      "space g b": null,
+      // <leader>gd / <leader>gD — Git diff views.
+      "space g d": "git_panel::ToggleFocus",
+      "space g shift-d": "git_panel::ToggleFocus",
+      // <leader>gg / <leader>gG — Lazygit root/cwd (external tool).
+      // XXX: may not work without external terminal workflow.
+      "space g g": "terminal_panel::Toggle",
+      "space g shift-g": "terminal_panel::Toggle",
+      // <leader>gf / <leader>gl / <leader>gL — file history/log.
+      "space g f": "git_panel::ToggleFocus",
+      "space g l": "git_panel::ToggleFocus",
+      "space g shift-l": "git_panel::ToggleFocus",
+      // <leader>gB / <leader>gY — git browse open/copy.
+      // TODO: add keymap later by user
+      "space g shift-b": null,
+      "space g shift-y": null,
+      // <leader>gi / <leader>gI / <leader>gp / <leader>gP — GitHub issues/PR pickers.
+      // XXX: may not work natively in Zed without extension integration.
+      "space g i": null,
+      "space g shift-i": null,
+      "space g p": null,
+      "space g shift-p": null,
+
+      // --- LSP + code actions ---
+      // <leader>cf / <leader>f — format buffer/range.
+      "space c f": "editor::Format",
+      "space f": "editor::Format",
+      // <leader>cd — line diagnostics.
+      "space c d": "editor::Hover",
+      // <leader>cs / <leader>cS — symbols and LSP references/defs via Trouble.
+      "space c s": "outline::Toggle",
+      "space c shift-s": "outline::Toggle",
+      // <leader>cn — Generate annotations (Neogen plugin).
+      "space c n": null,
+
+      // --- Diagnostics / Trouble group ---
+      // <leader>xx / <leader>xX — diagnostics list.
+      "space x x": "diagnostics::Deploy",
+      "space x shift-x": "diagnostics::Deploy",
+      // <leader>xQ / <leader>xL / <leader>xq / <leader>xl — qf/loc list variants.
+      "space x shift-q": "diagnostics::Deploy",
+      "space x shift-l": "diagnostics::Deploy",
+      "space x q": "diagnostics::Deploy",
+      "space x l": "diagnostics::Deploy",
+      // <leader>xt / <leader>xT — TODO comments via Trouble (plugin-only behavior).
+      "space x t": null,
+      "space x shift-t": null,
+
+      // --- Buffers / tabs (ported from <leader>b/* and <Tab> maps) ---
+      // <leader>bb and ` — switch to previous/other buffer.
+      "space b b": ["tab_switcher::Toggle", { "select_last": true }],
+      "`": ["tab_switcher::Toggle", { "select_last": true }],
+      // <leader>bd — delete current buffer.
+      "space b d": ["pane::CloseActiveItem", { "close_pinned": false }],
+      // <leader>bD — delete buffer+window in Neovim.
+      // TODO: close pane mapping can differ from Vim tab/window model.
+      "space b shift-d": ["pane::CloseActiveItem", { "close_pinned": false }],
+      // <leader>bo — delete other buffers.
+      "space b o": ["pane::CloseOtherItems", { "close_pinned": false }],
+      // <leader>bl / <leader>br — close buffers left/right.
+      "space b l": ["pane::CloseItemsToTheLeft", { "close_pinned": false }],
+      "space b r": ["pane::CloseItemsToTheRight", { "close_pinned": false }],
+      // <leader>bp — toggle pin tab.
+      "space b p": "pane::TogglePinTab",
+      // <leader>bP — delete non-pinned buffers.
+      "space b shift-p": ["pane::CloseCleanItems", { "close_pinned": false }],
+      // H / L / [b / ]b — previous/next buffer.
+      "shift-h": "pane::ActivatePreviousItem",
+      "shift-l": "pane::ActivateNextItem",
+      "[ b": "pane::ActivatePreviousItem",
+      "] b": "pane::ActivateNextItem",
+
+      // <Tab> family from your Neovim config.
+      "tab [": "pane::ActivatePreviousItem",
+      "tab ]": "pane::ActivateNextItem",
+      "tab tab": "workspace::NewFile",
+      "tab d": ["pane::CloseActiveItem", { "close_pinned": false }],
+      // <Tab>f / <Tab>l / <Tab>o (first/last/only tab) are Vim-tab semantics.
+      // TODO: add keymap later by user
+      // XXX: may not work exactly in Zed's tab/pane model.
+      "tab f": null,
+      "tab l": null,
+      "tab o": ["pane::CloseOtherItems", { "close_pinned": false }],
+
+      // --- Window / pane management ---
+      // | and - — split right / split below.
+      "|": "pane::SplitRight",
+      "-": "pane::SplitDown",
+      // <leader>wd — close window/pane.
+      // TODO: choose preferred pane close action for your workflow.
+      "space w d": null,
+      // <leader>wm — zoom mode in Neovim.
+      "space w m": "workspace::ToggleZoom",
+      // <C-h/j/k/l> — move focus across panes.
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-l": "workspace::ActivatePaneRight",
+      // <C-Up/Down/Left/Right> were window resize in Neovim.
+      // TODO: map to preferred dock/pane resize workflow.
+      "ctrl-up": null,
+      "ctrl-down": null,
+      "ctrl-left": null,
+      "ctrl-right": null,
+
+      // --- Terminals / command palette / utility ---
+      // <leader>ft / <leader>fT and <C-/> — terminal toggle.
+      "space f t": "terminal_panel::Toggle",
+      "space f shift-t": "terminal_panel::Toggle",
+      "ctrl-/": "terminal_panel::Toggle",
+      // : — command history in Neovim; in Zed this opens command palette.
+      ":": "command_palette::Toggle",
+      // <leader>l — Lazy plugin manager in Neovim.
+      "space l": null,
+      // <leader>qq — quit all.
+      "space q q": "workspace::CloseWindow",
+      // <leader>qs / ql / qS / qd — session management (plugin specific).
+      "space q s": null,
+      "space q l": null,
+      "space q shift-s": null,
+      "space q d": null,
+      // <leader>E / <leader>e — explorer toggles.
+      "shift-e": "project_panel::ToggleFocus",
+      "e": "project_panel::ToggleFocus",
+      "space f e": "project_panel::ToggleFocus",
+      "space f shift-e": "project_panel::ToggleFocus",
+
+      // --- Editing ergonomics from your custom keymaps.lua ---
+      // <C-s> — save file.
+      "ctrl-s": "workspace::Save",
+      // <C-a> — select all.
+      "ctrl-a": "editor::SelectAll",
+      // <C-c> — escape (keep Vim muscle memory).
+      "ctrl-c": ["workspace::SendKeystrokes", "escape"],
+      // <C-d>/<C-u> centered half-page scroll in Neovim; keep default Vim behavior in Zed.
+      // TODO: add keymap later by user if you want exact centered scrolling emulation.
+      "ctrl-d": null,
+      "ctrl-u": null,
+      // <Esc> clears highlights in Neovim.
+      // TODO: add keymap later by user if you want custom clear behavior.
+      "escape": null,
+      // <leader>d/D/y/Y/p/P — explicit system clipboard mappings in your keymaps.lua.
+      // TODO: add keymap later by user after choosing clipboard strategy in Zed Vim.
+      // XXX: may not work exactly like Neovim registers.
+      "space d": null,
+      "space shift-d": null,
+      "space y": null,
+      "space shift-y": null,
+      "space p": null,
+      "space shift-p": null,
+
+      // --- Toggles from LazyVim <leader>u/* ---
+      // Most are plugin/UI toggles that do not map 1:1 to Zed actions.
+      // TODO: add keymap later by user (or via Zed extensions/command aliases)
+      // XXX: may not work
+      "space u a": null,
+      "space u b": null,
+      "space u c": null,
+      "space u d": null,
+      "space u shift-d": null,
+      "space u f": null,
+      "space u shift-f": null,
+      "space u g": null,
+      "space u shift-g": null,
+      "space u h": null,
+      "space u i": null,
+      "space u shift-i": null,
+      "space u l": null,
+      "space u shift-l": null,
+      "space u n": null,
+      "space u p": null,
+      "space u r": null,
+      "space u s": null,
+      "space u shift-s": null,
+      "space u t": null,
+      "space u shift-t": null,
+      "space u w": null,
+      "space u z": "workspace::ToggleZoom",
+      "space u shift-z": "workspace::ToggleZoom",
+      "space u shift-a": null,
+      "space u shift-c": null
+    }
+  }
+]

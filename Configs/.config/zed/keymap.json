@@ -1,0 +1,52 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      // "shift shift": "file_finder::Toggle"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      // "j k": "vim::NormalBefore"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      // TODO: add git keybinding like git hunk stage ghs
+      "space e": [
+        // neovim like file explorer
+        "task::Spawn",
+        { "task_name": "file_explorer", "reveal_target": "center" }
+      ],
+      "space f f": [
+        // Telescope like file finder
+        "task::Spawn",
+        { "task_name": "file_finder", "reveal_target": "center" }
+      ],
+      "space s f": [
+        // Telescope like file finder
+        "task::Spawn",
+        { "task_name": "file_finder", "reveal_target": "center" }
+      ],
+      "space s g": [
+        // Telescope like live grep
+        "task::Spawn",
+        { "task_name": "fulltext_search", "reveal_target": "center" }
+      ]
+    }
+  },
+  {
+    "bindings": {
+      "ctrl-b": "workspace::ToggleLeftDock"
+    }
+  }
+]

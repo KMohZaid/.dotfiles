@@ -1,0 +1,26 @@
+[
+  {
+    // neovim telescope like file finder with television package
+    "label": "file_finder",
+    "command": "zeditor \"$(tv files)\"",
+    "hide": "always",
+    "allow_concurrent_runs": true,
+    "use_new_terminal": true
+  },
+  {
+    // neovim telescope like fuzzy grep with television package
+    "label": "fulltext_search",
+    "command": "bash ~/.dotfiles/scripts/zeditor-tv-grep.sh",
+    "hide": "always",
+    "allow_concurrent_runs": true,
+    "use_new_terminal": true
+  },
+  {
+    // neovim like file explorer using yazi
+    "label": "file_explorer",
+    "command": "bash ~/.dotfiles/scripts/zeditor-yazi-explorer.sh",
+    "hide": "always",
+    "allow_concurrent_runs": true,
+    "use_new_terminal": true
+  }
+]
