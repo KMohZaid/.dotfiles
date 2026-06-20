@@ -55,6 +55,10 @@ function nvim
     end
 end
 
+# Project jump
+function pj
+    cd "$(find ~/projects -mindepth 1 -maxdepth 2 -type d | fzf)"
+end
 # Display Pokemon with fastfetch
 function display_pokemon_fastfetch
     set poke_name ""
@@ -93,11 +97,11 @@ starship init fish | source
 # ============================================================================
 
 # Only activate if no other virtualenv is active
-if not set -q VIRTUAL_ENV
-    if test -d "$HOME/.venv"
-        source $HOME/.venv/bin/activate.fish
-    end
-end
+#if not set -q VIRTUAL_ENV
+#    if test -d "$HOME/.venv"
+#        source $HOME/.venv/bin/activate.fish
+#    end
+#end
 
 # ============================================================================
 # Fish Plugin Manager (fisher)
