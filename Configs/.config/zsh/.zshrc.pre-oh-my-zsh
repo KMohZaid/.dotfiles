@@ -1,0 +1,301 @@
+# Zsh Shell Configuration for Arch Linux
+
+# ============================================================================
+# Environment Variables
+# ============================================================================
+export XDG_CONFIG_HOME="$HOME/.config"
+export VISUAL=nvim
+export EDITOR=nvim
+export LS_COLORS="$LS_COLORS:ow=1;34:tw=1;34:"
+export PATH="$PATH:$HOME/.local/bin:$HOME/.cargo/bin"
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+
+# ============================================================================
+# History
+# ============================================================================
+# Path to the file where history is stored
+HISTFILE=~/.zsh_history
+# Number of commands loaded into the current session's memory
+HISTSIZE=10000
+# Number of commands actually saved to the history file on disk
+SAVEHIST=10000
+
+# Recommended companions to the above (not strictly required, but most
+# people expect this behavior and zsh doesn't do it by default):
+setopt EXTENDED_HISTORY       # save timestamp + duration per command (needed for the `: epoch:0;cmd` format)
+setopt HIST_IGNORE_DUPS       # don't record a command if it's the same as the previous one
+setopt HIST_IGNORE_ALL_DUPS   # remove older duplicate entries when a new matching one is added
+setopt HIST_FIND_NO_DUPS      # skip duplicates when searching history
+setopt SHARE_HISTORY          # share history across all open zsh sessions in real time
+setopt APPEND_HISTORY         # append to HISTFILE rather than overwrite on shell exit
+# NOTE: HIST_REDUCE_BLANKS deliberately NOT set. It strips the
+# backslash+newline of multi-line commands when writing to history,
+# collapsing them onto a single line (confirmed: this is exactly what
+# was happening — `echo "hi" \<newline>| cat` was being saved and
+# replayed as `echo "hi" | cat`, losing the original line breaks).
+
+# ============================================================================
+# Zsh Plugin Manager (zinit)
+# ============================================================================
+# Install zinit first if not already installed:
+# bash -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
+
+ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+[ ! -d "$ZINIT_HOME" ] && mkdir -p "$(dirname "$ZINIT_HOME")"
+[ ! -d "$ZINIT_HOME/.git" ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
+
+# ============================================================================
+# Completion styling — set BEFORE compinit runs, per zsh-completions' own
+# install instructions. Makes Tab cycle through a highlighted menu and
+# fuzzy-match partial names (e.g. `cd ~/.co<Tab>` jumping to `.config`).
+# ============================================================================
+zstyle ':completion:*' menu select                                  # arrow-key-navigable, highlighted menu instead of a flat list
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'  # case-insensitive + fuzzy substring matching
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"              # color the completion list like `ls`
+zstyle ':completion:*' group-name ''                                # group completions by type (commands, files, etc.)
+zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'   # colored section headers in the menu
+zstyle ':completion:*' verbose yes
+
+# Highlighted selection in the Tab menu needs this module loaded —
+# menu select doesn't work without it even with the zstyle above
+zmodload zsh/complist
+
+# zsh-completions adds extra completion definitions to $fpath — must be
+# loaded before compinit so those new definitions actually get picked up
+zinit light zsh-users/zsh-completions
+
+# Oh My Zsh's git plugin — provides ~200 git aliases (g, ga, gst, gco,
+# etc). Loaded as a standalone snippet (not a full OMZ install) since
+# we only want this one plugin. Must load BEFORE zsh-abbr's import
+# step below, since import-aliases converts whatever aliases already
+# exist in the session.
+zinit snippet OMZP::git
+
+# Abbreviations (fish-like abbr expansion for zsh) — loaded eagerly since
+# we immediately import OMZ's git aliases into it below.
+zinit light olets/zsh-abbr
+
+# Convert every OMZ git alias into a persistent zsh-abbr user
+# abbreviation, once. After the first run this is a no-op (the
+# abbreviations persist across sessions), so it's safe to leave this
+# line in permanently — it just costs a fast no-op check on each
+# subsequent shell start.
+# `--quiet` matches the ABBR_QUIET convention used elsewhere in this
+# config; drop it temporarily if you want to see what gets imported.
+abbr import-aliases --quiet 2>/dev/null
+
+# Load completions — only rebuild the completion dump once a day instead
+# of scanning $fpath on every single shell launch (this is usually the
+# single biggest startup-time win available).
+autoload -Uz compinit
+_comp_dump="${ZDOTDIR:-$HOME}/.zcompdump"
+if [[ -n "$_comp_dump"(#qN.mh+24) ]]; then
+    compinit -d "$_comp_dump"
+else
+    compinit -C -d "$_comp_dump"
+fi
+unset _comp_dump
+
+# ============================================================================
+# fzf-tab: replaces zsh's Tab completion menu with an fzf-powered fuzzy
+# picker. Per its own docs, must load AFTER compinit but BEFORE any
+# plugin that wraps zle widgets (syntax-highlighting, autosuggestions) —
+# otherwise it can't properly intercept Tab.
+# ============================================================================
+zinit light Aloxaf/fzf-tab
+
+# Syntax highlighting (must load before autosuggestions per zsh-users docs,
+# and after fzf-tab per fzf-tab's docs — see above)
+zinit light zsh-users/zsh-syntax-highlighting
+
+# Auto suggestions
+zinit light zsh-users/zsh-autosuggestions
+
+# ============================================================================
+# Navigation keys (Home, End, Delete, Page Up/Down, Ctrl+Left/Right,
+# Ctrl+Delete word-jump) — using Oh My Zsh's own lib/key-bindings.zsh
+# instead of hand-rolled bindkey lines.
+#
+# WHY THESE ARE MISSING BY DEFAULT: fish auto-detects the terminal and
+# binds sane keys for all of these out of the box. zsh's default emacs
+# keymap does NOT — it only binds a small core set (arrows, backspace,
+# a few Ctrl-letter combos) and leaves the rest unbound, so raw escape
+# bytes fell through to self-insert (e.g. Home typing a literal `<`).
+# This is expected zsh behavior, not something that broke.
+#
+# NOTE on Ctrl+Backspace: this file deliberately does NOT bind it.
+# Ctrl+Backspace's byte sequence (commonly ^H) is indistinguishable
+# from plain Backspace on many terminals — kitty's own docs note the
+# two are "swapped in some terminals." An earlier version of this
+# config bound ^H to backward-kill-word, which silently turned EVERY
+# backspace into a whole-word delete (explaining "deletes the whole
+# path" instead of one character). OMZ's keybindings file avoids this
+# by only binding the unambiguous Ctrl+Delete sequence (^[[3;5~)
+# instead, which is reported the same way across terminals.
+#
+# LOAD ORDER: this MUST come before the fzf integration below, not
+# after. OMZ's key-bindings.zsh rebinds ^R to plain
+# history-incremental-search-backward (zsh's bare substring search) —
+# if it loads after fzf's bindings, it silently overwrites fzf's
+# fuzzy Ctrl+R/Ctrl+T/Alt+C, which is exactly what happened when this
+# was ordered the other way around.
+# ============================================================================
+zinit snippet OMZL::key-bindings.zsh
+
+# OMZL::key-bindings.zsh above rebinds Space to `magic-space` (its own
+# history-expansion-on-space feature), which silently overwrites
+# zsh-abbr's Space binding (abbr-expand-and-insert) set when zsh-abbr
+# loaded earlier. Without this, abbreviations only expand on Enter
+# instead of Space. Re-applying zsh-abbr's own bindings verbatim (from
+# its source) so it wins and isearch behaves the same as it would
+# without OMZ's keybindings loaded at all.
+bindkey " " abbr-expand-and-insert     # space expands abbreviations
+bindkey "^ " magic-space               # Ctrl+Space = literal space, no expansion
+bindkey -M isearch "^ " abbr-expand-and-insert  # inside Ctrl+R search: Ctrl+Space expands
+bindkey -M isearch " " magic-space              # inside Ctrl+R search: plain space stays literal (so you can search for "git commit" etc.)
+
+# ============================================================================
+# History search — fzf fuzzy widget instead of zsh's plain bck-i-search.
+# Modern fzf (0.48+) embeds its own shell integration in the binary, so
+# `fzf --zsh` generates the CTRL-T / CTRL-R / ALT-C bindings directly —
+# no need to locate key-bindings.zsh on disk or wrap it in a plugin.
+# Loaded AFTER OMZL::key-bindings.zsh above so fzf's bindings win.
+#
+# FZF_UNIQUE_HISTORY: hides duplicate entries in the Ctrl+R picker
+# specifically, without deduplicating the actual ~/.zsh_history file.
+# (HIST_IGNORE_ALL_DUPS above only removes *consecutive* duplicates at
+# write-time — repeats separated by other commands, like running `ls`
+# many times across a day, still show as repeated lines in Ctrl+R
+# without this.) Must be set before `fzf --zsh` runs, since that's
+# what generates the actual Ctrl+R widget using this variable.
+# ============================================================================
+export FZF_UNIQUE_HISTORY=1
+
+if command -v fzf &>/dev/null; then
+    source <(fzf --zsh)
+fi
+
+bindkey '^S' history-incremental-search-forward
+
+# Make zsh-syntax-highlighting recognize abbreviations (g, ga, gst, gco,
+# etc — imported from OMZ git aliases above) as valid commands instead
+# of coloring them red as "unknown command".
+# Adapted from zsh-abbr's own docs (https://zsh-abbr.olets.dev/integrations.html);
+# their single-line nested expansion didn't reliably join with `|` when
+# tested here, so this uses an intermediate array — verified working.
+# Uses _USER_ (not _SESSION_) since `abbr import-aliases` creates user-
+# scope abbreviations by default (no -S flag was passed above).
+if (( ${#ABBR_REGULAR_USER_ABBREVIATIONS} )); then
+    ZSH_HIGHLIGHT_HIGHLIGHTERS+=(regexp)
+    typeset -A ZSH_HIGHLIGHT_REGEXP
+    _abbr_keys=(${(Qk)ABBR_REGULAR_USER_ABBREVIATIONS})
+    _abbr_pattern="${(j:|:)_abbr_keys}"
+    ZSH_HIGHLIGHT_REGEXP+=('^[[:blank:][:space:]]*('"$_abbr_pattern"')$' 'fg=green')
+    unset _abbr_keys _abbr_pattern
+fi
+
+# ============================================================================
+# Zsh Colors - Syntax Highlighting
+# ============================================================================
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[error]='fg=red,bold'
+ZSH_HIGHLIGHT_STYLES[default]='none'
+ZSH_HIGHLIGHT_STYLES[comment]='fg=8'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=magenta'
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=cyan'
+
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+
+# ============================================================================
+# Shell Aliases
+# ============================================================================
+alias l='ll'
+alias ld='eza -lhD --icons=auto'
+alias ll='eza -lha --icons=auto --sort=name --group-directories-first'
+alias ls='eza -1 --icons -a --group-directories-first'
+alias lt='eza --icons=auto --tree'
+alias vim='nvim'
+alias tmux='tmux -u' # start tmux with unicode support
+
+# use trash instead of rm
+# trashy if found else trash, if neither found, use rm
+# moved from trash to trashy because i liked trashy
+if command -v trashy &>/dev/null; then
+    alias rm='trashy put'
+elif command -v trash &>/dev/null; then
+    alias rm='trash'
+fi
+
+# ============================================================================
+# Functions
+# ============================================================================
+
+# Fix nvim workspace stays in current directory instead of going to argument path
+nvim() {
+    if [[ $# -eq 1 && -d $1 ]]; then
+        sh -c "cd $1; nvim"
+    else
+        command nvim "$@"
+    fi
+}
+
+# Project jump
+pj() {
+    cd "$(find ~/projects -mindepth 1 -maxdepth 2 -type d | fzf)"
+}
+
+# Display Pokemon with fastfetch
+display_pokemon_fastfetch() {
+    local poke_name=""
+    local fastfetch_color_code=$(printf "\u001b[36m")
+
+    zparseopts -D -E n:=poke_name_arg
+
+    if [[ -n "$poke_name_arg" ]]; then
+        poke_name="${poke_name_arg[2]}"
+        pokemon-colorscripts -n "$poke_name" >/tmp/poke.txt
+    else
+        pokemon-colorscripts -r >/tmp/poke.txt
+    fi
+
+    poke_name=$(head -n 1 /tmp/poke.txt)
+    poke_name="$(echo "${poke_name:0:1}" | tr '[:lower:]' '[:upper:]')${poke_name:1}"
+
+    jq --arg new_heading "$fastfetch_color_code   $poke_name" '.modules[0].format = $new_heading' ~/.config/fastfetch/config.jsonc >/tmp/fastfetch.tmp.json
+    sed -i 1d /tmp/poke.txt
+    fastfetch -l /tmp/poke.txt -c /tmp/fastfetch.tmp.json
+}
+
+# ============================================================================
+# Initialization
+# ============================================================================
+
+# Run Pokemon display on startup
+#[[ -o interactive ]] && display_pokemon_fastfetch
+
+# Initialize starship prompt
+eval "$(starship init zsh)"
+
+# ============================================================================
+# Use Python Venv properly, also auto load user home venv
+# ============================================================================
+
+# Only activate if no other virtualenv is active
+#if [[ -z "$VIRTUAL_ENV" ]]; then
+#    if [[ -d "$HOME/.venv" ]]; then
+#        source "$HOME/.venv/bin/activate"
+#    fi
+#fi
+
+# pnpm
+export PNPM_HOME="/home/waifu/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

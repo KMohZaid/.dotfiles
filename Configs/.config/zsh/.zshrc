@@ -1,4 +1,17 @@
-# Zsh Shell Configuration for Arch Linux
+# Zsh Shell Configuration for Arch Linux — Oh My Zsh edition
+#
+# REBUILD NOTE: this version restructures around Oh My Zsh as the
+# primary framework (source $ZSH/oh-my-zsh.sh), replacing the previous
+# zinit-based setup. Reason: OMZ's lib/grep.zsh auto-colorizes grep
+# output, which the zinit snippet approach never picked up since it
+# only pulled in individual files (git plugin, key-bindings.zsh), not
+# OMZ's full lib/ directory. Full OMZ gets that and everything else
+# OMZ ships for free.
+#
+# Everything below that isn't bundled with OMZ (zsh-syntax-highlighting,
+# zsh-autosuggestions, fzf-tab, zsh-abbr) needs a one-time manual clone
+# into $ZSH_CUSTOM/plugins/ before this file will work — see the
+# INSTALL block right before the plugins=(...) line below.
 
 # ============================================================================
 # Environment Variables
@@ -26,25 +39,19 @@ setopt EXTENDED_HISTORY       # save timestamp + duration per command (needed fo
 setopt HIST_IGNORE_DUPS       # don't record a command if it's the same as the previous one
 setopt HIST_IGNORE_ALL_DUPS   # remove older duplicate entries when a new matching one is added
 setopt HIST_FIND_NO_DUPS      # skip duplicates when searching history
-setopt HIST_REDUCE_BLANKS     # trim superfluous whitespace before saving
 setopt SHARE_HISTORY          # share history across all open zsh sessions in real time
 setopt APPEND_HISTORY         # append to HISTFILE rather than overwrite on shell exit
+# NOTE: HIST_REDUCE_BLANKS deliberately NOT set. It strips the
+# backslash+newline of multi-line commands when writing to history,
+# collapsing them onto a single line (confirmed: `echo "hi" \<newline>|
+# cat` was being saved and replayed as `echo "hi" | cat`, losing the
+# original line breaks).
 
 # ============================================================================
-# Zsh Plugin Manager (zinit)
-# ============================================================================
-# Install zinit first if not already installed:
-# bash -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
-
-ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
-[ ! -d "$ZINIT_HOME" ] && mkdir -p "$(dirname "$ZINIT_HOME")"
-[ ! -d "$ZINIT_HOME/.git" ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-source "${ZINIT_HOME}/zinit.zsh"
-
-# ============================================================================
-# Completion styling — set BEFORE compinit runs, per zsh-completions' own
-# install instructions. Makes Tab cycle through a highlighted menu and
-# fuzzy-match partial names (e.g. `cd ~/.co<Tab>` jumping to `.config`).
+# Completion styling — set BEFORE compinit runs (OMZ calls compinit
+# internally inside oh-my-zsh.sh below). Makes Tab cycle through a
+# highlighted menu and fuzzy-match partial names (e.g. `cd ~/.co<Tab>`
+# jumping to `.config`).
 # ============================================================================
 zstyle ':completion:*' menu select                                  # arrow-key-navigable, highlighted menu instead of a flat list
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'  # case-insensitive + fuzzy substring matching
@@ -57,121 +64,189 @@ zstyle ':completion:*' verbose yes
 # menu select doesn't work without it even with the zstyle above
 zmodload zsh/complist
 
-# zsh-completions adds extra completion definitions to $fpath — must be
-# loaded before compinit so those new definitions actually get picked up
-zinit light zsh-users/zsh-completions
-
-# Abbreviations (fish-like abbr expansion for zsh) — loaded eagerly since
-# git-abbreviations.zsh depends on the `abbr` command existing immediately.
-zinit light olets/zsh-abbr
-
-# Load completions — only rebuild the completion dump once a day instead
-# of scanning $fpath on every single shell launch (this is usually the
-# single biggest startup-time win available).
-autoload -Uz compinit
-_comp_dump="${ZDOTDIR:-$HOME}/.zcompdump"
-if [[ -n "$_comp_dump"(#qN.mh+24) ]]; then
-    compinit -d "$_comp_dump"
-else
-    compinit -C -d "$_comp_dump"
-fi
-unset _comp_dump
+# ============================================================================
+# fzf-tab keys: tell fzf-tab to use Ctrl+Space for multi-select etc
+# before it loads, harmless if fzf-tab isn't installed yet
+# ============================================================================
+export FZF_UNIQUE_HISTORY=1   # dedupe entries shown in fzf's Ctrl+R picker without touching the real ~/.zsh_history file
 
 # ============================================================================
-# fzf-tab: replaces zsh's Tab completion menu with an fzf-powered fuzzy
-# picker. Per its own docs, must load AFTER compinit but BEFORE any
-# plugin that wraps zle widgets (syntax-highlighting, autosuggestions) —
-# otherwise it can't properly intercept Tab.
+# Oh My Zsh
 # ============================================================================
-zinit light Aloxaf/fzf-tab
-
-# Syntax highlighting (must load before autosuggestions per zsh-users docs,
-# and after fzf-tab per fzf-tab's docs — see above)
-zinit light zsh-users/zsh-syntax-highlighting
-
-# Auto suggestions
-zinit light zsh-users/zsh-autosuggestions
+export ZSH="$ZDOTDIR/ohmyzsh"
+ZSH_THEME=""   # no OMZ theme — starship (initialized at the bottom of this file) handles the prompt instead
 
 # ============================================================================
-# History search — fzf fuzzy widget instead of zsh's plain bck-i-search.
-# Modern fzf (0.48+) embeds its own shell integration in the binary, so
-# `fzf --zsh` generates the CTRL-T / CTRL-R / ALT-C bindings directly —
-# no need to locate key-bindings.zsh on disk or wrap it in a plugin.
+# Custom plugin bootstrap (self-healing install)
+#
+# WHY THIS EXISTS: OMZ's plugins=(...) array only LOADS plugins already
+# present on disk — unlike zinit (which this config used to use), OMZ
+# itself does not auto-fetch missing plugins. Four of the plugins below
+# (zsh-syntax-highlighting, zsh-autosuggestions, fzf-tab, zsh-abbr)
+# aren't bundled with OMZ, so without this block, a fresh machine —
+# new laptop, new server, anywhere this dotfiles repo gets cloned for
+# the first time — would hit "[oh-my-zsh] plugin 'x' not found" on
+# first launch and require manually running four git-clone commands
+# before the shell would even start cleanly.
+#
+# WHAT THIS DOES: for each custom plugin, check if its directory
+# already exists under $ZSH_CUSTOM/plugins/ — if not, clone it. This
+# runs on every shell launch, but the check itself (`[ -d ... ]`) is
+# nearly instant, so once plugins are present this is a fast no-op,
+# not a slow repeated install. The whole point is: clone the dotfiles
+# repo onto a brand new machine, run `zsh`, and everything just works
+# with no manual setup step — true for any OS this repo lands on.
+#
+# zsh-abbr specifically needs --recurse-submodules — it depends on a
+# zsh-job-queue submodule that a plain clone won't fetch (confirmed by
+# testing: a non-recursive clone leaves zsh-abbr partially broken).
 # ============================================================================
-if command -v fzf &>/dev/null; then
-    source <(fzf --zsh)
-fi
+typeset -A _custom_plugins=(
+    zsh-syntax-highlighting  "https://github.com/zsh-users/zsh-syntax-highlighting"
+    zsh-autosuggestions      "https://github.com/zsh-users/zsh-autosuggestions"
+    fzf-tab                  "https://github.com/Aloxaf/fzf-tab"
+    zsh-abbr                 "https://github.com/olets/zsh-abbr"
+)
+
+_zsh_custom_dir="${ZSH_CUSTOM:-$ZSH/custom}/plugins"
+mkdir -p "$_zsh_custom_dir"
+
+for _plugin_name _plugin_url in ${(kv)_custom_plugins}; do
+    if [[ ! -d "$_zsh_custom_dir/$_plugin_name" ]]; then
+        echo "Installing missing zsh plugin: $_plugin_name ..."
+        if [[ "$_plugin_name" == "zsh-abbr" ]]; then
+            git clone --quiet --recurse-submodules "$_plugin_url" "$_zsh_custom_dir/$_plugin_name"
+        else
+            git clone --quiet "$_plugin_url" "$_zsh_custom_dir/$_plugin_name"
+        fi
+    fi
+done
+unset _custom_plugins _zsh_custom_dir _plugin_name _plugin_url
+
+# Plugin order matters: OMZ loads this array in sequence, in one pass,
+# inside oh-my-zsh.sh below.
+#   git        — bundled, ~200 git aliases (g, ga, gst, gco, etc.)
+#   fzf        — bundled, uses `fzf --zsh` internally on fzf >=0.48
+#                (verified: identical to what this config used to
+#                hand-roll, so safe to let OMZ own it now)
+#   fzf-tab    — custom; must come before the two highlighting plugins
+#                below so it can intercept Tab before they wrap zle
+#                widgets (same requirement as when this was zinit-managed)
+#   zsh-syntax-highlighting — custom; before autosuggestions per its own docs
+#   zsh-autosuggestions     — custom
+#   zsh-abbr   — custom; loaded last of the custom set so the
+#                Space-key fix below has a known, settled starting point
+plugins=(git fzf fzf-tab zsh-syntax-highlighting zsh-autosuggestions zsh-abbr)
+
+source $ZSH/oh-my-zsh.sh
+
+# ============================================================================
+# Git abbreviations via zsh-abbr — import OMZ's git aliases (loaded
+# above) into zsh-abbr once. After the first run this is a no-op (the
+# abbreviations persist across sessions in zsh-abbr's own store), so
+# it's safe to leave this line in permanently.
+# `--quiet` suppresses the per-abbreviation "Added..." confirmation
+# spam on every shell start; drop it temporarily to see what imports.
+# ============================================================================
+abbr import-aliases --quiet 2>/dev/null
+
+# `abbr import-aliases` scans EVERY active alias in the session when it
+# runs, not just OMZ's git ones — so it also swept up pre-existing
+# `l`, `la`, `ll`, `ls`, `lsa` aliases (plain `ls -lah` style) that
+# were already defined elsewhere. Those abbreviations now silently
+# shadow the eza-based `l`/`ld`/`ll`/`ls`/`lt` aliases defined further
+# down this file (abbreviations expand on Space, before the alias
+# layer even gets a chance to run) — so eza was being skipped even
+# though the alias was correct. Removing them here, every shell start,
+# so the eza aliases always win. `2>/dev/null` since `abbr erase` on
+# something already absent just errors harmlessly.
+for _ls_abbr in l la ll ls lsa; do
+    abbr erase "$_ls_abbr" --quiet 2>/dev/null
+done
+unset _ls_abbr
+
+# ============================================================================
+# Space-key fix: OMZ's lib/key-bindings.zsh (loaded as part of
+# oh-my-zsh.sh above) rebinds Space to `magic-space`, which silently
+# overwrites zsh-abbr's own Space binding (abbr-expand-and-insert) set
+# when the zsh-abbr plugin loaded earlier in the plugins=(...) pass.
+# Without this fix, abbreviations only expand on Enter, not Space —
+# confirmed by testing this exact conflict with the real plugins.
+# Re-applying zsh-abbr's bindings verbatim (from its own source) so it
+# wins, including the isearch-mode counterparts.
+# ============================================================================
+bindkey " " abbr-expand-and-insert     # space expands abbreviations
+bindkey "^ " magic-space               # Ctrl+Space = literal space, no expansion
+bindkey -M isearch "^ " abbr-expand-and-insert  # inside Ctrl+R search: Ctrl+Space expands
+bindkey -M isearch " " magic-space              # inside Ctrl+R search: plain space stays literal (so you can search for "git commit" etc.)
 
 bindkey '^S' history-incremental-search-forward
 
 # ============================================================================
-# Navigation keys (Home, End, Delete, Ctrl+Left/Right word-jump)
+# Multi-line history recall — cursor position fix.
 #
-# WHY THESE ARE MISSING BY DEFAULT: fish auto-detects the terminal and
-# binds sane keys for all of these out of the box. zsh's default emacs
-# keymap does NOT — it only binds a small core set (arrows, backspace,
-# a few Ctrl-letter combos) and leaves Home/End/Delete/Ctrl+Arrow
-# completely unbound. Without a binding, the terminal's raw escape-
-# sequence bytes fall through to self-insert one character at a time
-# (e.g. Home typing a literal `<`, Delete doing nothing useful).
-# This is expected zsh behavior, not something that broke — fish was
-# just doing this work silently and zsh never has.
+# SYMPTOM: recalling a multi-line command (Up arrow, or Ctrl+R) placed
+# the cursor at the end of the FIRST line instead of the end of the
+# whole buffer. This is standard zsh behavior for the
+# up-line-or-beginning-search widget that OMZ's key-bindings.zsh binds
+# to the Up/Down arrows by default — it restores the cursor to
+# wherever it was when the command was originally typed, which for a
+# freshly-recalled command is right where the line continuation began.
 #
-# Home/End/Delete: bound via terminfo when available (adapts to
-# whatever $TERM reports) with hardcoded xterm-style fallbacks for
-# terminals missing these terminfo entries.
-# Ctrl+Left/Right: terminfo has no standard capability name for these,
-# so they're bound directly to the sequence sent by xterm, kitty,
-# gnome-terminal, and most other modern emulators.
+# FIRST ATTEMPT (REVERTED): zsh ships history-search-end specifically
+# for this kind of fix, but it calls the wrapped widget with a dot
+# prefix (`zle .${WIDGET%-end}`), which only works on true zsh
+# builtins. up-line-or-beginning-search is NOT a builtin — it's a
+# function-based widget that OMZ autoloads and registers with `zle -N`
+# — so the dot-prefixed call failed outright with
+# "No such widget `.up-line-or-beginning-search'" the moment Up/Down
+# arrow was pressed. Confirmed by checking `zle -l` output: true
+# builtins like history-beginning-search-backward are always listed;
+# up-line-or-beginning-search only appears after it's been registered,
+# proving it's function-based, not a builtin — exactly the case
+# history-search-end's dot-prefix trick doesn't support.
+#
+# WORKING FIX: a small custom wrapper function that calls the
+# underlying widget WITHOUT the dot prefix (correct for function-based
+# widgets), then moves to end-of-line on completion. Verified to
+# register cleanly with no "no such widget" error before being added
+# here.
 # ============================================================================
-[[ -n "${terminfo[khome]}" ]] && bindkey "${terminfo[khome]}" beginning-of-line
-[[ -n "${terminfo[kend]}"  ]] && bindkey "${terminfo[kend]}"  end-of-line
-[[ -n "${terminfo[kdch1]}" ]] && bindkey "${terminfo[kdch1]}" delete-char
-bindkey '^[[H'  beginning-of-line   # fallback: Home (xterm-style)
-bindkey '^[[F'  end-of-line         # fallback: End (xterm-style)
-bindkey '^[[1~' beginning-of-line   # fallback: Home (vt-style, some terminals)
-bindkey '^[[4~' end-of-line         # fallback: End (vt-style, some terminals)
-bindkey '^[[3~' delete-char         # fallback: Delete (forward-delete next char)
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
 
-bindkey '^[[1;5D' backward-word     # Ctrl+Left  -> jump back one word
-bindkey '^[[1;5C' forward-word      # Ctrl+Right -> jump forward one word
+_up_line_or_beginning_search_end() {
+    zle up-line-or-beginning-search
+    zle end-of-line
+}
+zle -N _up_line_or_beginning_search_end
 
-# Ctrl+Backspace -> delete the whole word behind the cursor (not just
-# one character). Terminals vary in what byte they actually send for
-# this combo, so two common ones are bound to the same action.
-bindkey '^H'    backward-kill-word  # most terminals (sends ASCII BS, 0x08)
-bindkey '^[[3;5~' kill-word         # some terminals send this instead (rare, but harmless to bind both)
+_down_line_or_beginning_search_end() {
+    zle down-line-or-beginning-search
+    zle end-of-line
+}
+zle -N _down_line_or_beginning_search_end
 
-# Page Up / Page Down -> step through command history (closest zsh
-# equivalent to a fish/editor-style page scroll)
-[[ -n "${terminfo[kpp]}" ]] && bindkey "${terminfo[kpp]}" up-line-or-history
-[[ -n "${terminfo[knp]}" ]] && bindkey "${terminfo[knp]}" down-line-or-history
-bindkey '^[[5~' up-line-or-history    # fallback: Page Up
-bindkey '^[[6~' down-line-or-history  # fallback: Page Down
+bindkey '^[[A' _up_line_or_beginning_search_end
+bindkey '^[[B' _down_line_or_beginning_search_end
+[[ -n "${terminfo[kcuu1]}" ]] && bindkey "${terminfo[kcuu1]}" _up_line_or_beginning_search_end
+[[ -n "${terminfo[kcud1]}" ]] && bindkey "${terminfo[kcud1]}" _down_line_or_beginning_search_end
 
-# Shift+Left / Shift+Right -> extend a text selection one word at a
-# time (mirrors normal editor behavior). zsh has no true "selection"
-# concept like a GUI editor, so this is approximated as word-jump with
-# the same motion — visually it won't highlight, but the cursor lands
-# in the same place a real selection boundary would.
-bindkey '^[[1;2D' backward-word     # Shift+Left
-bindkey '^[[1;2C' forward-word      # Shift+Right
-
-# Git abbreviations (g, ga, gaa, gl, gp, etc.) - kept in their own file
-# Lives alongside this .zshrc in $ZDOTDIR
-[ -f "$ZDOTDIR/git-abbreviations.zsh" ] && source "$ZDOTDIR/git-abbreviations.zsh"
-
-# Make zsh-syntax-highlighting recognize abbreviations (gl, ga, gc, etc.)
-# as valid commands instead of coloring them red as "unknown command".
+# ============================================================================
+# Make zsh-syntax-highlighting recognize abbreviations (g, ga, gst,
+# gco, etc — imported from OMZ git aliases above) as valid commands
+# instead of coloring them red as "unknown command".
 # Adapted from zsh-abbr's own docs (https://zsh-abbr.olets.dev/integrations.html);
-# their single-line nested expansion didn't reliably join with `|` when
-# tested here, so this uses an intermediate array — verified working.
-# Uses _SESSION_ (not _USER_) since git-abbreviations.zsh adds session
-# abbreviations via `abbr -S`.
-if (( ${#ABBR_REGULAR_SESSION_ABBREVIATIONS} )); then
+# their single-line nested expansion didn't reliably join with `|`
+# when tested, so this uses an intermediate array — verified working.
+# Uses _USER_ (not _SESSION_) since `abbr import-aliases` creates
+# user-scope abbreviations by default (no -S flag was passed above).
+# ============================================================================
+if (( ${#ABBR_REGULAR_USER_ABBREVIATIONS} )); then
     ZSH_HIGHLIGHT_HIGHLIGHTERS+=(regexp)
     typeset -A ZSH_HIGHLIGHT_REGEXP
-    _abbr_keys=(${(Qk)ABBR_REGULAR_SESSION_ABBREVIATIONS})
+    _abbr_keys=(${(Qk)ABBR_REGULAR_USER_ABBREVIATIONS})
     _abbr_pattern="${(j:|:)_abbr_keys}"
     ZSH_HIGHLIGHT_REGEXP+=('^[[:blank:][:space:]]*('"$_abbr_pattern"')$' 'fg=green')
     unset _abbr_keys _abbr_pattern
@@ -201,6 +276,11 @@ alias ld='eza -lhD --icons=auto'
 alias ll='eza -lha --icons=auto --sort=name --group-directories-first'
 alias ls='eza -1 --icons -a --group-directories-first'
 alias lt='eza --icons=auto --tree'
+# NOTE: eza doesn't understand ls-style flags like --color=tty (that
+# errors with `eza: Option --color has no "tty" setting`) — eza only
+# accepts --color=always/auto/never. If a script or muscle memory
+# pipes ls-flag syntax through these aliases, that's the cause. Not a
+# reason to drop the aliases though — just don't mix ls flags in here.
 alias vim='nvim'
 alias tmux='tmux -u' # start tmux with unicode support
 
