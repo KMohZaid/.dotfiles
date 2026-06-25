@@ -9,9 +9,10 @@
 # OMZ ships for free.
 #
 # Everything below that isn't bundled with OMZ (zsh-syntax-highlighting,
-# zsh-autosuggestions, fzf-tab, zsh-abbr) needs a one-time manual clone
-# into $ZSH_CUSTOM/plugins/ before this file will work — see the
-# INSTALL block right before the plugins=(...) line below.
+# zsh-autosuggestions, fzf-tab, zsh-abbr, zsh-history-substring-search)
+# needs a one-time manual clone into $ZSH_CUSTOM/plugins/ before this
+# file will work — see the INSTALL block right before the plugins=(...)
+# line below.
 
 # ============================================================================
 # Environment Variables
@@ -81,13 +82,14 @@ ZSH_THEME=""   # no OMZ theme — starship (initialized at the bottom of this fi
 #
 # WHY THIS EXISTS: OMZ's plugins=(...) array only LOADS plugins already
 # present on disk — unlike zinit (which this config used to use), OMZ
-# itself does not auto-fetch missing plugins. Four of the plugins below
-# (zsh-syntax-highlighting, zsh-autosuggestions, fzf-tab, zsh-abbr)
-# aren't bundled with OMZ, so without this block, a fresh machine —
-# new laptop, new server, anywhere this dotfiles repo gets cloned for
-# the first time — would hit "[oh-my-zsh] plugin 'x' not found" on
-# first launch and require manually running four git-clone commands
-# before the shell would even start cleanly.
+# itself does not auto-fetch missing plugins. Five of the plugins below
+# (zsh-syntax-highlighting, zsh-autosuggestions, fzf-tab, zsh-abbr,
+# zsh-history-substring-search) aren't bundled with OMZ, so without
+# this block, a fresh machine — new laptop, new server, anywhere this
+# dotfiles repo gets cloned for the first time — would hit
+# "[oh-my-zsh] plugin 'x' not found" on first launch and require
+# manually running five git-clone commands before the shell would even
+# start cleanly.
 #
 # WHAT THIS DOES: for each custom plugin, check if its directory
 # already exists under $ZSH_CUSTOM/plugins/ — if not, clone it. This
@@ -102,10 +104,11 @@ ZSH_THEME=""   # no OMZ theme — starship (initialized at the bottom of this fi
 # testing: a non-recursive clone leaves zsh-abbr partially broken).
 # ============================================================================
 typeset -A _custom_plugins=(
-    zsh-syntax-highlighting  "https://github.com/zsh-users/zsh-syntax-highlighting"
-    zsh-autosuggestions      "https://github.com/zsh-users/zsh-autosuggestions"
-    fzf-tab                  "https://github.com/Aloxaf/fzf-tab"
-    zsh-abbr                 "https://github.com/olets/zsh-abbr"
+    zsh-syntax-highlighting      "https://github.com/zsh-users/zsh-syntax-highlighting"
+    zsh-autosuggestions          "https://github.com/zsh-users/zsh-autosuggestions"
+    fzf-tab                      "https://github.com/Aloxaf/fzf-tab"
+    zsh-abbr                     "https://github.com/olets/zsh-abbr"
+    zsh-history-substring-search "https://github.com/zsh-users/zsh-history-substring-search"
 )
 
 _zsh_custom_dir="${ZSH_CUSTOM:-$ZSH/custom}/plugins"
@@ -132,11 +135,15 @@ unset _custom_plugins _zsh_custom_dir _plugin_name _plugin_url
 #   fzf-tab    — custom; must come before the two highlighting plugins
 #                below so it can intercept Tab before they wrap zle
 #                widgets (same requirement as when this was zinit-managed)
-#   zsh-syntax-highlighting — custom; before autosuggestions per its own docs
-#   zsh-autosuggestions     — custom
+#   zsh-syntax-highlighting     — custom; before autosuggestions per its own docs
+#   zsh-autosuggestions         — custom
+#   zsh-history-substring-search — custom; must load after
+#                zsh-syntax-highlighting since it reuses some of the
+#                same highlighting internals for its "no match" flash
+#                (called out in its own docs)
 #   zsh-abbr   — custom; loaded last of the custom set so the
 #                Space-key fix below has a known, settled starting point
-plugins=(git fzf fzf-tab zsh-syntax-highlighting zsh-autosuggestions zsh-abbr)
+plugins=(git fzf fzf-tab zsh-syntax-highlighting zsh-autosuggestions zsh-history-substring-search zsh-abbr)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -180,55 +187,29 @@ bindkey -M isearch " " magic-space              # inside Ctrl+R search: plain sp
 bindkey '^S' history-incremental-search-forward
 
 # ============================================================================
-# Multi-line history recall — cursor position fix.
+# Fish-like history recall via zsh-history-substring-search.
 #
-# SYMPTOM: recalling a multi-line command (Up arrow, or Ctrl+R) placed
-# the cursor at the end of the FIRST line instead of the end of the
-# whole buffer. This is standard zsh behavior for the
-# up-line-or-beginning-search widget that OMZ's key-bindings.zsh binds
-# to the Up/Down arrows by default — it restores the cursor to
-# wherever it was when the command was originally typed, which for a
-# freshly-recalled command is right where the line continuation began.
+# WHY: the OMZ default (up-line-or-beginning-search, bound by
+# key-bindings.zsh as part of oh-my-zsh.sh above) is a PREFIX matcher —
+# typing "ssh server" and pressing Up only finds lines that *start*
+# with "ssh server". It will not find "sshpass -p .... ssh server"
+# because the match has to anchor at column 0.
 #
-# FIRST ATTEMPT (REVERTED): zsh ships history-search-end specifically
-# for this kind of fix, but it calls the wrapped widget with a dot
-# prefix (`zle .${WIDGET%-end}`), which only works on true zsh
-# builtins. up-line-or-beginning-search is NOT a builtin — it's a
-# function-based widget that OMZ autoloads and registers with `zle -N`
-# — so the dot-prefixed call failed outright with
-# "No such widget `.up-line-or-beginning-search'" the moment Up/Down
-# arrow was pressed. Confirmed by checking `zle -l` output: true
-# builtins like history-beginning-search-backward are always listed;
-# up-line-or-beginning-search only appears after it's been registered,
-# proving it's function-based, not a builtin — exactly the case
-# history-search-end's dot-prefix trick doesn't support.
+# zsh-history-substring-search matches the typed text anywhere in the
+# line (like Fish's history search, and like a `grep` over history),
+# so "ssh server" Up will surface "sshpass -p .... ssh server" too.
 #
-# WORKING FIX: a small custom wrapper function that calls the
-# underlying widget WITHOUT the dot prefix (correct for function-based
-# widgets), then moves to end-of-line on completion. Verified to
-# register cleanly with no "no such widget" error before being added
-# here.
+# This REPLACES the previous custom up/down wrapper
+# (_up_line_or_beginning_search_end / _down_line_or_beginning_search_end)
+# — both that wrapper and this plugin bind the same arrow keys, so only
+# one can own them. zsh-history-substring-search also places the
+# cursor at the end of the recalled line on its own, so the cursor-
+# position problem the old wrapper existed to solve is moot here.
 # ============================================================================
-autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-
-_up_line_or_beginning_search_end() {
-    zle up-line-or-beginning-search
-    zle end-of-line
-}
-zle -N _up_line_or_beginning_search_end
-
-_down_line_or_beginning_search_end() {
-    zle down-line-or-beginning-search
-    zle end-of-line
-}
-zle -N _down_line_or_beginning_search_end
-
-bindkey '^[[A' _up_line_or_beginning_search_end
-bindkey '^[[B' _down_line_or_beginning_search_end
-[[ -n "${terminfo[kcuu1]}" ]] && bindkey "${terminfo[kcuu1]}" _up_line_or_beginning_search_end
-[[ -n "${terminfo[kcud1]}" ]] && bindkey "${terminfo[kcud1]}" _down_line_or_beginning_search_end
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+[[ -n "${terminfo[kcuu1]}" ]] && bindkey "${terminfo[kcuu1]}" history-substring-search-up
+[[ -n "${terminfo[kcud1]}" ]] && bindkey "${terminfo[kcud1]}" history-substring-search-down
 
 # ============================================================================
 # Make zsh-syntax-highlighting recognize abbreviations (g, ga, gst,
@@ -264,6 +245,12 @@ ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=magenta'
 ZSH_HIGHLIGHT_STYLES[globbing]='fg=cyan'
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+
+# zsh-history-substring-search match highlighting (colors shown while
+# cycling through matches with Up/Down). Defaults are fine; uncomment
+# and tweak if the default green/red is hard to see in your terminal:
+# HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=blue,fg=white,bold'
+# HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='bg=red,fg=white,bold'
 
 # ============================================================================
 # Shell Aliases
