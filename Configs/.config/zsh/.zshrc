@@ -268,6 +268,11 @@ alias lt='eza --icons=auto --tree'
 alias vim='nvim'
 alias tmux='tmux -u' # start tmux with unicode support
 
+
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
 # use trash instead of rm
 # trashy if found else trash, if neither found, use rm
 # moved from trash to trashy because i liked trashy
