@@ -186,6 +186,11 @@ bindkey -M isearch " " magic-space              # inside Ctrl+R search: plain sp
 
 bindkey '^S' history-incremental-search-forward
 
+# Neovim cmd edit
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
+
 # ============================================================================
 # Fish-like history recall via zsh-history-substring-search.
 #
@@ -266,12 +271,15 @@ alias lt='eza --icons=auto --tree'
 # pipes ls-flag syntax through these aliases, that's the cause. Not a
 # reason to drop the aliases though — just don't mix ls flags in here.
 alias vim='nvim'
+alias nano='nvim'
 alias tmux='tmux -u' # start tmux with unicode support
 
 
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
+
+alias open='xdg-open'
 
 # use trash instead of rm
 # trashy if found else trash, if neither found, use rm
